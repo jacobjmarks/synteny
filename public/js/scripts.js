@@ -12,7 +12,7 @@ window.onload = () => {
             let seqs = [];
             for (let i = 0; i < NUM_SEQS; i++) {
                 let seq = "";
-                let seq_len = Math.floor(Math.random() * 100) + 50;
+                let seq_len = Math.floor(Math.random() * 100) + 25;
                 for (let j = 0; j < seq_len; j++) {
                     seq += alphabet[Math.floor(Math.random() * 4)];
                 }
@@ -79,8 +79,10 @@ function drawChart(seqs, matches) {
 
     circos
         .layout(nodes, {
+            innerRadius: 320,
+            outerRadius: 320,
             labels: {
-                display: true,
+                display: false,
                 radialOffset: 85
             },
             ticks: {
@@ -88,6 +90,56 @@ function drawChart(seqs, matches) {
                 spacing: 10
             }
         })
+        .text(
+            'text',
+            seqs.map((seq) => {
+                let chars = [];
+                for (let i = 0; i < seq.length; i++) {
+                    chars.push({
+                        block_id: seq,
+                        position: i + 1,
+                        value: seq[i]
+                    });
+                }
+                return chars;
+            }).reduce((a,b) => {
+                return a.concat(b);
+            }),
+            {
+                innerRadius: 1.01,              
+                style: {
+                    "font-size": 8,
+                    "font-weight": "bold",
+                }
+            }
+        )
+        .highlight(
+            'highlight',
+            seqs.map((seq) => {
+                let chars = [];
+                for (let i = 0; i < seq.length; i++) {
+                    chars.push({
+                        block_id: seq,
+                        start: i,
+                        end: i + 1,
+                        name: seq[i]
+                    });
+                }
+                return chars;
+            }).reduce((a,b) => {
+                return a.concat(b);
+            }),
+            {
+                innerRadius: 1,
+                outerRadius: 0.9,
+                tooltipContent: (d) => {
+                    return "<p>" + d.name + "</p>";
+                },
+                color: "white",
+                strokeColor: "black",
+                strokeWidth: 1,
+            }
+        )
         .chords(
             'chords',
             matches.reduce((a,b) => {
@@ -99,7 +151,13 @@ function drawChart(seqs, matches) {
                 }
             }),
             {
-                opacity: 0.5
+                color: () => {
+                    return '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);                    
+                },
+                opacity: 0.5,
+                tooltipContent: (chord) => {
+                    return "<h3>" + chord.value + "</h3>";
+                }
             }
         )
         .render();
