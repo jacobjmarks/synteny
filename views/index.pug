@@ -1,8 +1,11 @@
 html
     head
-        script(src="https://cdn.rawgit.com/nicgirault/circosJS/v2/dist/circos.js")
+        script(src="/js/jquery/jquery-3.2.1.min.js")
+        script(src="/js/d3/d3.min.js")
         script(src="/js/scripts.js")
+
+        link(rel="stylesheet" href="/css/styles.css")
 
         title Synteny
     body
-        svg#chart(style="width:750px;height:750px")
+        div#chart
