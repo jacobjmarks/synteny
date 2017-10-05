@@ -6,7 +6,7 @@ $(document).ready(() => {
 
     for (let i = 0; i < NUM_SEQS; i++) {
         let seq = "";
-        let seq_len = 100;
+        let seq_len = 250;
         for (let j = 0; j < seq_len; j++) {
             seq += alphabet[Math.floor(Math.random() * 4)];
         }
@@ -68,7 +68,11 @@ function drawResults(matches) {
     .enter().each((seq) => {
         let seq_div = chart.append("div").classed("sequence", true);
         for (let i = 0; i < seq.length; i++) {
-            seq_div.append("l").text(seq[i]);
+            let seg_width = $("#chart").width() / seq.length;
+            seq_div.append("div")
+                .classed("seg-" + seq[i].toUpperCase(), true)
+                .style("width", seq.length / 100 + "%")
+                .style("height", 30)
         }
     })
 }

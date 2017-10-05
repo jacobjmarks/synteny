@@ -1,0 +1,21 @@
+.sequence {
+    display: flex;
+    font-family: monospace;
+    margin-bottom: 10%;
+}
+
+.seg-A {
+    background-color: red;
+}
+
+.seg-C {
+    background-color: blue;
+}
+
+.seg-G {
+    background-color: green;
+}
+
+.seg-T {
+    background-color: yellow;
+}
