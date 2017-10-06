@@ -14,6 +14,7 @@ $(document).ready(() => {
     }
 
     drawSequences();
+    drawLinks();
 })
 
 const MIN_KMER = 6;
@@ -85,4 +86,60 @@ function drawSequences() {
                 // })
         }
     })
+}
+
+function drawLinks() {
+    let svg = d3.select("body").append("svg")
+        .style("width", "100%")
+        .style("height", "100%")
+
+    let area = d3.area()
+        .x0((d) => {return 100})
+        .x1((d) => {return 0})
+        .y0((d) => {return 100})
+        .y1((d) => {return 0})
+
+    let seqs = d3.selectAll(".sequence").nodes();
+    
+    var testData = [
+        [ 0, 10],
+        [10, 20],
+        [20, 30],
+        [30, 40],
+    ];
+
+    for (let i = 0; i < seqs.length - 1; i++) {
+        for (let j = i + 1; j < seqs.length; j++) {
+            let matches = compare(SEQUENCES[i], SEQUENCES[j]);
+            
+            let seqA = seqs[i];
+            let seqB = seqs[j];
+            let segsA = d3.select(seqs[i]).selectAll(".seq-seg").nodes();
+            let segsB = d3.select(seqs[j]).selectAll(".seq-seg").nodes();
+
+            let areaData = [];
+
+            for (let i = 0; i < matches.length; i++) {
+                let sourceStart = segsA[matches[i].source.start];
+                let sourceEnd = segsA[matches[i].source.end];
+                let targetStart = segsB[matches[i].target.start];
+                let targetEnd = segsB[matches[i].target.end];
+
+                areaData.push([
+                    [$(sourceStart).position().left, 0],
+                    [$(targetStart).position().left, $("svg").height()],
+                    [$(targetEnd).position().left, $("svg").height()],
+                    [$(sourceEnd).position().left, 0]
+                ])
+            }
+
+            svg.selectAll("path.area")
+            .data(areaData).enter()
+            .append("path")
+                .classed("area", true)
+                .style("opacity", "0.2")
+                .attr("fill", "blue")
+                .attr("d", d3.area().curve(d3.curveLinear))
+        }
+    }
 }

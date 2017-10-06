@@ -4,7 +4,11 @@
     margin-bottom: 10%;
 }
 
-.seg-A {
+.seq-seg {
+    border: 1px solid black;
+}
+
+/* .seg-A {
     background-color: red;
 }
 
@@ -18,4 +22,4 @@
 
 .seg-T {
     background-color: yellow;
-}
+} */
