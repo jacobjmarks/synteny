@@ -49,6 +49,14 @@ function compare(seqA, seqB) {
 
 function drawSequences() {
     let chart = d3.select("#chart");
+
+    // let popup = d3.select("body").append("div")	
+    //     .attr("class", "tooltip")
+    //     .style("background-color", "white")
+    //     .style("border", "1px solid black")
+    //     .style("border-radius", "3px")
+    //     .style("padding", "2px 5px")
+    //     .style("opacity", 0)
     
     chart
     .selectAll("div")
@@ -62,6 +70,19 @@ function drawSequences() {
                 .classed("seg-" + seq[i].toUpperCase(), true)
                 .style("width", seq.length / 100 + "%")
                 .style("height", 30)
+                // .on("mouseover", () => {
+                //     popup.transition()
+                //          .duration(200)
+                //          .style("opacity", .9);
+                //     popup.html(seq[i])
+                //          .style("left", (d3.event.pageX - 15) + "px")
+                //          .style("top", (d3.event.pageY - 30) + "px");
+                // })
+                // .on("mouseout", function(d) {
+                //     popup.transition()
+                //          .duration(500)
+                //          .style("opacity", 0);
+                // })
         }
     })
 }
