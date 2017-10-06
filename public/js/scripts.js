@@ -93,7 +93,11 @@ function drawSequences() {
     })
 }
 
-function drawLinks() {    
+function clearLinks() {
+    $("svg").remove();
+}
+
+function drawLinks() {
     let seqs = d3.selectAll(".sequence").nodes();
 
     for (let i = 0; i < seqs.length - 1; i++) {
@@ -110,11 +114,11 @@ function drawLinks() {
 
             let areaData = [];
 
-            for (let i = 0; i < matches.length; i++) {
-                let sourceStart = segsA[matches[i].source.start];
-                let sourceEnd = segsA[matches[i].source.end];
-                let targetStart = segsB[matches[i].target.start];
-                let targetEnd = segsB[matches[i].target.end];
+            for (let k = 0; k < matches.length; k++) {
+                let sourceStart = segsA[matches[k].source.start];
+                let sourceEnd = segsA[matches[k].source.end];
+                let targetStart = segsB[matches[k].target.start];
+                let targetEnd = segsB[matches[k].target.end];
 
                 let ssPos = $(sourceStart).position();
                 let sePos = $(sourceEnd).position();
@@ -146,3 +150,8 @@ function drawLinks() {
         }
     }
 }
+
+$(window).resize(() => {
+    clearLinks();
+    drawLinks();
+})
