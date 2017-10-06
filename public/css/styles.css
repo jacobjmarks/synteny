@@ -5,10 +5,10 @@
 }
 
 .seq-seg {
-    border: 1px solid black;
+    /* border: 1px solid black; */
 }
 
-/* .seg-A {
+.seg-A {
     background-color: red;
 }
 
@@ -22,4 +22,4 @@
 
 .seg-T {
     background-color: yellow;
-} */
+}

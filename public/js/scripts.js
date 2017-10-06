@@ -13,6 +13,14 @@ $(document).ready(() => {
         SEQUENCES.push(seq);
     }
 
+    popup = d3.select("body").append("div")	
+        .attr("class", "tooltip")
+        .style("background-color", "white")
+        .style("border", "1px solid black")
+        .style("border-radius", "3px")
+        .style("padding", "2px 5px")
+        .style("opacity", 0)
+
     drawSequences();
     drawLinks();
 })
@@ -50,14 +58,6 @@ function compare(seqA, seqB) {
 
 function drawSequences() {
     let container = d3.select("#seq-container");
-
-    // let popup = d3.select("body").append("div")	
-    //     .attr("class", "tooltip")
-    //     .style("background-color", "white")
-    //     .style("border", "1px solid black")
-    //     .style("border-radius", "3px")
-    //     .style("padding", "2px 5px")
-    //     .style("opacity", 0)
     
     container
     .selectAll("div")
@@ -147,6 +147,19 @@ function drawLinks() {
                 .style("opacity", "0.2")
                 .attr("fill", "blue")
                 .attr("d", d3.area().curve(d3.curveMonotoneY))
+                .on("mouseover", (_, i) => {
+                    popup.transition()
+                         .duration(200)
+                         .style("opacity", .9);
+                    popup.html(matches[i].value)
+                         .style("left", (d3.event.pageX - 15) + "px")
+                         .style("top", (d3.event.pageY - 30) + "px");
+                })
+                .on("mouseout", () => {
+                    popup.transition()
+                         .duration(500)
+                         .style("opacity", 0);
+                })
         }
     }
 }
