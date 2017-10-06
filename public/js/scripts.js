@@ -1,7 +1,7 @@
 const SEQUENCES = [];
 
 $(document).ready(() => {
-    const NUM_SEQS = 2;
+    const NUM_SEQS = 3;
     let alphabet = "ACGT";
 
     for (let i = 0; i < NUM_SEQS; i++) {
@@ -49,7 +49,7 @@ function compare(seqA, seqB) {
 }
 
 function drawSequences() {
-    let chart = d3.select("#chart");
+    let container = d3.select("#seq-container");
 
     // let popup = d3.select("body").append("div")	
     //     .attr("class", "tooltip")
@@ -59,13 +59,18 @@ function drawSequences() {
     //     .style("padding", "2px 5px")
     //     .style("opacity", 0)
     
-    chart
+    container
     .selectAll("div")
     .data(SEQUENCES)
-    .enter().each((seq) => {
-        let seq_div = chart.append("div").classed("sequence", true);
+    .enter().each((seq, i) => {
+        let seq_div = container
+            .append("div").classed("row", true)
+            .append("div").classed("col", true).classed("seq-col", true)
+            .append("div").classed("w-100", true)
+                .classed("sequence", true)
+                .classed("seq-" + i, true)
         for (let i = 0; i < seq.length; i++) {
-            let seg_width = $("#chart").width() / seq.length;
+            let seg_width = $(".sequence" + i).width() / seq.length;
             seq_div.append("div")
                 .classed("seq-seg", true)
                 .classed("seg-" + seq[i].toUpperCase(), true)
@@ -89,26 +94,12 @@ function drawSequences() {
 }
 
 function drawLinks() {
-    let svg = d3.select("body").append("svg")
-        .style("width", "100%")
-        .style("height", "100%")
-
-    let area = d3.area()
-        .x0((d) => {return 100})
-        .x1((d) => {return 0})
-        .y0((d) => {return 100})
-        .y1((d) => {return 0})
-
     let seqs = d3.selectAll(".sequence").nodes();
-    
-    var testData = [
-        [ 0, 10],
-        [10, 20],
-        [20, 30],
-        [30, 40],
-    ];
 
     for (let i = 0; i < seqs.length - 1; i++) {
+        let svg = d3.select(d3.selectAll(".seq-col").nodes()[i])
+            .append("svg")
+            .style("width", "100%")
         for (let j = i + 1; j < seqs.length; j++) {
             let matches = compare(SEQUENCES[i], SEQUENCES[j]);
             
