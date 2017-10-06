@@ -13,12 +13,12 @@ $(document).ready(() => {
         SEQUENCES.push(seq);
     }
 
-    drawResults(compare(SEQUENCES));
+    drawSequences();
 })
 
 const MIN_KMER = 6;
 
-function commonKmers(seqA, seqB) {
+function compare(seqA, seqB) {
     let kmers = [];
 
     for (let kmer_len = seqA.length; kmer_len >= MIN_KMER; kmer_len--) {
@@ -47,19 +47,7 @@ function commonKmers(seqA, seqB) {
     return kmers;
 }
 
-function compare(seqs) {
-    let matches = [];
-
-    for (let i = 0; i < seqs.length - 1; i++) {
-        for (let j = i + 1; j < seqs.length; j++) {
-            matches.push(commonKmers(seqs[i], seqs[j]));
-        }
-    }
-
-    return matches;
-}
-
-function drawResults(matches) {
+function drawSequences() {
     let chart = d3.select("#chart");
     
     chart
@@ -70,6 +58,7 @@ function drawResults(matches) {
         for (let i = 0; i < seq.length; i++) {
             let seg_width = $("#chart").width() / seq.length;
             seq_div.append("div")
+                .classed("seq-seg", true)
                 .classed("seg-" + seq[i].toUpperCase(), true)
                 .style("width", seq.length / 100 + "%")
                 .style("height", 30)
