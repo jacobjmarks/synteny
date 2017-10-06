@@ -93,7 +93,7 @@ function drawSequences() {
     })
 }
 
-function drawLinks() {
+function drawLinks() {    
     let seqs = d3.selectAll(".sequence").nodes();
 
     for (let i = 0; i < seqs.length - 1; i++) {
@@ -116,11 +116,23 @@ function drawLinks() {
                 let targetStart = segsB[matches[i].target.start];
                 let targetEnd = segsB[matches[i].target.end];
 
+                let ssPos = $(sourceStart).position();
+                let sePos = $(sourceEnd).position();
+                let tsPos = $(targetStart).position();
+                let tePos = $(targetEnd).position();
+
+                let link_seq_offset = 0;
+                let seq_height = $(seqs[0]).height();
+
                 areaData.push([
-                    [$(sourceStart).position().left, 0],
-                    [$(targetStart).position().left, $("svg").height()],
-                    [$(targetEnd).position().left, $("svg").height()],
-                    [$(sourceEnd).position().left, 0]
+                    [ssPos.left, 0 - seq_height],
+                    [ssPos.left, link_seq_offset],
+                    [tsPos.left, $("svg").height() - link_seq_offset],
+                    [tsPos.left, $("svg").height() + seq_height],
+                    [tePos.left, $("svg").height() + seq_height],
+                    [tePos.left, $("svg").height() - link_seq_offset],
+                    [sePos.left, link_seq_offset],
+                    [sePos.left, 0 - seq_height]
                 ])
             }
 
@@ -130,7 +142,7 @@ function drawLinks() {
                 .classed("area", true)
                 .style("opacity", "0.2")
                 .attr("fill", "blue")
-                .attr("d", d3.area().curve(d3.curveLinear))
+                .attr("d", d3.area().curve(d3.curveMonotoneY))
         }
     }
 }
