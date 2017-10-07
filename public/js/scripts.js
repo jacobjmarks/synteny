@@ -39,12 +39,10 @@ function compare(seqA, seqB) {
                 kmers.push({
                     value: kmer,
                     source: {
-                        id: seqA,
                         start: i,
                         end: i + kmer_len - 1
                     },
                     target: {
-                        id: seqB,
                         start: index,
                         end: index + kmer_len - 1
                     }
@@ -109,8 +107,8 @@ function drawLinks() {
             
             let seqA = seqs[i];
             let seqB = seqs[j];
-            let segsA = d3.select(seqs[i]).selectAll(".seq-seg").nodes();
-            let segsB = d3.select(seqs[j]).selectAll(".seq-seg").nodes();
+            let segsA = d3.select(seqA).selectAll(".seq-seg").nodes();
+            let segsB = d3.select(seqB).selectAll(".seq-seg").nodes();
 
             let areaData = [];
 
@@ -127,14 +125,15 @@ function drawLinks() {
 
                 let link_seq_offset = 0;
                 let seq_height = $(seqs[0]).height();
+                let svg_height = $("svg").height();
 
                 areaData.push([
                     [ssPos.left, 0 - seq_height],
                     [ssPos.left, link_seq_offset],
-                    [tsPos.left, $("svg").height() - link_seq_offset],
-                    [tsPos.left, $("svg").height() + seq_height],
-                    [tePos.left, $("svg").height() + seq_height],
-                    [tePos.left, $("svg").height() - link_seq_offset],
+                    [tsPos.left, svg_height - link_seq_offset],
+                    [tsPos.left, svg_height + seq_height],
+                    [tePos.left, svg_height + seq_height],
+                    [tePos.left, svg_height - link_seq_offset],
                     [sePos.left, link_seq_offset],
                     [sePos.left, 0 - seq_height]
                 ])
