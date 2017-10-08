@@ -8,7 +8,7 @@ module.exports.info_divisions = function(callback) {
             "Content-Type": "application/json"
         }
     }, (error, response, body) => {
-        callback(body);
+        callback(JSON.parse(body));
     })
 }
 
@@ -23,6 +23,8 @@ module.exports.info_species = function(division, callback) {
             "division": division
         }
     }, (error, response, body) => {
-        callback(body);
+        callback(JSON.parse(body).species.map((specie) => {
+            return specie.name;
+        }));
     })
 }

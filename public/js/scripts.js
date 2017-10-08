@@ -1,30 +1,45 @@
-const SEQUENCES = [];
-
 $(document).ready(() => {
-    const NUM_SEQS = 3;
-    let alphabet = "ACGT";
+    populateDivisions();
 
-    for (let i = 0; i < NUM_SEQS; i++) {
-        let seq = "";
-        let seq_len = 250;
-        for (let j = 0; j < seq_len; j++) {
-            seq += alphabet[Math.floor(Math.random() * 4)];
-        }
-        SEQUENCES.push(seq);
-    }
+    // const NUM_SEQS = 3;
+    // let alphabet = "ACGT";
 
-    popup = d3.select("body").append("div")	
-        .attr("class", "tooltip")
-        .style("background-color", "white")
-        .style("border", "1px solid black")
-        .style("border-radius", "3px")
-        .style("padding", "2px 5px")
-        .style("opacity", 0)
+    // for (let i = 0; i < NUM_SEQS; i++) {
+    //     let seq = "";
+    //     let seq_len = 250;
+    //     for (let j = 0; j < seq_len; j++) {
+    //         seq += alphabet[Math.floor(Math.random() * 4)];
+    //     }
+    //     SEQUENCES.push(seq);
+    // }
 
-    drawSequences();
-    drawLinks();
+    // popup = d3.select("body").append("div")	
+    //     .attr("class", "tooltip")
+    //     .style("background-color", "white")
+    //     .style("border", "1px solid black")
+    //     .style("border-radius", "3px")
+    //     .style("padding", "2px 5px")
+    //     .style("opacity", 0)
+            
+    // drawSequences();
+    // drawLinks();
 })
 
+function populateDivisions() {
+    $.ajax({
+        url: "/getDivisions",
+        method: "POST"
+    })
+    .done((divisions) => {
+        let select = $("#select-divisions");
+        for (let i = 0; i < divisions.length; i++) {
+            select.append(`<option>${divisions[i].substr(7)}</option>`)
+        }
+        select.selectpicker("refresh");
+    })
+}
+
+const SEQUENCES = [];
 const MIN_KMER = 6;
 
 function compare(seqA, seqB) {
