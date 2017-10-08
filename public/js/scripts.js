@@ -49,11 +49,13 @@ function populateGenomes(division) {
         method: "POST"
     })
     .done((genomes) => {
+        genomes.sort((a, b) => a.assembly.localeCompare(b.assembly));
         console.log(genomes);
         let select = $("#select-genomes");
         select.empty();
         for (let i = 0; i < genomes.length; i++) {
-            select.append(`<option>${genomes[i].display_name}</option>`)
+            let g = genomes[i];
+            select.append(`<option data-subtext="${g.common_name ? g.common_name : ''}">${g.display_name}</option>`)
         }
         select.selectpicker("refresh");
 
