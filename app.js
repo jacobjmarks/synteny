@@ -20,10 +20,10 @@ app.post("/getDivisions", (req, res) => {
     })
 })
 
-app.post("/getGenomes/:division", (req, res) => {
+app.post("/getSpecies/:division", (req, res) => {
     let division = req.params.division;
-    console.log(`POST /getGenomes/${division}`)
-    let cb = (genomes) => {res.send(genomes)};
+    console.log(`POST /getSpecies/${division}`)
+    let cb = (species) => {res.send(species)};
     (division === "Ensembl") ? ensembl.info_species(cb) : ensemblGenomes.info_species(division, cb);
 })
 

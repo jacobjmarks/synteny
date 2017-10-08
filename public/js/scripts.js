@@ -39,24 +39,24 @@ function populateDivisions() {
         select.selectpicker("refresh");
 
         select.change(() => {
-            populateGenomes(select.val());
+            populateSpecies(select.val());
         })
     })
 }
 
-function populateGenomes(division) {
+function populateSpecies(division) {
     $.ajax({
-        url: `/getGenomes/${division}`,
+        url: `/getSpecies/${division}`,
         method: "POST"
     })
-    .done((genomes) => {
-        genomes.sort((a, b) => a.assembly.localeCompare(b.assembly));
-        console.log(genomes);
-        let select = $("#select-genomes");
+    .done((species) => {
+        species.sort((a, b) => a.assembly.localeCompare(b.assembly));
+        console.log(species);
+        let select = $("#select-species");
         select.empty();
-        for (let i = 0; i < genomes.length; i++) {
-            let g = genomes[i];
-            select.append(`<option data-subtext="${g.common_name ? g.common_name : ''}">${g.display_name}</option>`)
+        for (let i = 0; i < species.length; i++) {
+            let s = species[i];
+            select.append(`<option data-subtext="${s.common_name ? s.common_name : ''}">${s.display_name}</option>`)
         }
         select.selectpicker("refresh");
 
