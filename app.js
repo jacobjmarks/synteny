@@ -9,17 +9,21 @@ app.use(express.static("public"));
 
 app.get('/', (req, res) => {
     console.log("GET /");
-    // genomeDB.info_divisions((divisions) => {
-    //     genomeDB.info_species(divisions[0], (species) => {
-    //         res.json(species);
-    //     })
-    // })
     res.render("index.pug");
 })
 
 app.post("/getDivisions", (req, res) => {
+    console.log("POST /getDivisions");
     genomeDB.info_divisions((divisions) => {
         res.send(divisions);
+    })
+})
+
+app.post("/getGenomes/:division", (req, res) => {
+    let division = req.params.division;
+    console.log(`POST /getGenomes/${division}`)
+    genomeDB.info_species(division, (genomes) => {
+        res.send(genomes);
     })
 })
 

@@ -33,9 +33,33 @@ function populateDivisions() {
     .done((divisions) => {
         let select = $("#select-divisions");
         for (let i = 0; i < divisions.length; i++) {
-            select.append(`<option>${divisions[i].substr(7)}</option>`)
+            select.append(`<option value="${divisions[i]}">${divisions[i].substr(7)}</option>`)
         }
         select.selectpicker("refresh");
+
+        select.change(() => {
+            populateGenomes(select.val());
+        })
+    })
+}
+
+function populateGenomes(division) {
+    $.ajax({
+        url: `/getGenomes/${division}`,
+        method: "POST"
+    })
+    .done((genomes) => {
+        console.log(genomes);
+        let select = $("#select-genomes");
+        select.empty();
+        for (let i = 0; i < genomes.length; i++) {
+            select.append(`<option>${genomes[i].display_name}</option>`)
+        }
+        select.selectpicker("refresh");
+
+        select.change(() => {
+            
+        })
     })
 }
 

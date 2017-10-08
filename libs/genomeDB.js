@@ -23,8 +23,6 @@ module.exports.info_species = function(division, callback) {
             "division": division
         }
     }, (error, response, body) => {
-        callback(JSON.parse(body).species.map((specie) => {
-            return specie.name;
-        }));
+        callback(JSON.parse(body).species);
     })
 }
