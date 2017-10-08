@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 
-const genomeDB = require("./libs/genomeDB.js")
+const ensemblGenomes = require("./libs/ensemblGenomes.js")
 
 const PORT = 3000;
 
@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
 
 app.post("/getDivisions", (req, res) => {
     console.log("POST /getDivisions");
-    genomeDB.info_divisions((divisions) => {
+    ensemblGenomes.info_divisions((divisions) => {
         res.send(divisions);
     })
 })
@@ -22,7 +22,7 @@ app.post("/getDivisions", (req, res) => {
 app.post("/getGenomes/:division", (req, res) => {
     let division = req.params.division;
     console.log(`POST /getGenomes/${division}`)
-    genomeDB.info_species(division, (genomes) => {
+    ensemblGenomes.info_species(division, (genomes) => {
         res.send(genomes);
     })
 })
