@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 
+const ensembl = require("./libs/ensembl.js")
 const ensemblGenomes = require("./libs/ensemblGenomes.js")
 
 const PORT = 3000;
@@ -22,9 +23,8 @@ app.post("/getDivisions", (req, res) => {
 app.post("/getGenomes/:division", (req, res) => {
     let division = req.params.division;
     console.log(`POST /getGenomes/${division}`)
-    ensemblGenomes.info_species(division, (genomes) => {
-        res.send(genomes);
-    })
+    let cb = (genomes) => {res.send(genomes)};
+    (division === "Ensembl") ? ensembl.info_species(cb) : ensemblGenomes.info_species(division, cb);
 })
 
 app.listen(PORT, () => {
