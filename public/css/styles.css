@@ -10,29 +10,3 @@
 .list-item {
     margin-top: 10px;
 }
-
-.sequence {
-    display: flex;
-    font-family: monospace;
-    /* margin-bottom: 10%; */
-}
-
-.seq-seg {
-    /* border: 1px solid black; */
-}
-
-.seg-A {
-    background-color: red;
-}
-
-.seg-C {
-    background-color: blue;
-}
-
-.seg-G {
-    background-color: green;
-}
-
-.seg-T {
-    background-color: yellow;
-}
