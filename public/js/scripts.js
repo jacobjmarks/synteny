@@ -56,7 +56,28 @@ function populateSpecies(division) {
         select.empty();
         for (let i = 0; i < species.length; i++) {
             let s = species[i];
-            select.append(`<option data-subtext="${s.common_name ? s.common_name : ''}">${s.display_name}</option>`)
+            select.append(`<option value="${s.name}" data-subtext="${s.common_name ? s.common_name : ''}">${s.display_name}</option>`)
+        }
+        select.selectpicker("refresh");
+
+        select.change(() => {
+            populateAssembly(division, select.val());
+        })
+    })
+}
+
+function populateAssembly(division, species) {
+    $.ajax({
+        url: `/getAssembly/${division}/${species}`,
+        method: "POST"
+    })
+    .done((karyotype) => {
+        // species.sort((a, b) => a.display_name.localeCompare(b.display_name));
+        console.log(karyotype);
+        let select = $("#select-assembly");
+        select.empty();
+        for (let i = 0; i < karyotype.length; i++) {
+            select.append(`<option>${karyotype[i]}</option>`)
         }
         select.selectpicker("refresh");
 

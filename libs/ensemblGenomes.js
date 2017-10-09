@@ -26,3 +26,15 @@ module.exports.info_species = function(division, callback) {
         callback(JSON.parse(body).species);
     })
 }
+
+module.exports.info_assembly = function(species, callback) {
+    request({
+        url: `http://rest.ensemblgenomes.org/info/assembly/${species}`,
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }, (error, response, body) => {
+        callback(JSON.parse(body).karyotype);
+    })
+}

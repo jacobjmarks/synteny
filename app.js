@@ -27,6 +27,14 @@ app.post("/getSpecies/:division", (req, res) => {
     (division === "Ensembl") ? ensembl.info_species(cb) : ensemblGenomes.info_species(division, cb);
 })
 
+app.post("/getAssembly/:division/:species", (req, res) => {
+    let division = req.params.division;
+    let species = req.params.species;
+    console.log(`POST /getAssembly/${species}`);
+    let cb = (karyotype) => {res.send(karyotype)};
+    (division === "Ensembl") ? ensembl.info_assembly(species, cb) : ensemblGenomes.info_assembly(species, cb);
+})
+
 app.listen(PORT, () => {
     console.log("Server listening on port " + PORT);
 })
