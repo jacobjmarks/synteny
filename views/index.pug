@@ -16,7 +16,7 @@ html
 
         script(src="/js/d3/d3.min.js")
         script(src="/js/scripts.js")
-        script(src="/js/pugtemplate-listitem.js")
+        script(src="/js/templates/listitem.js")
 
         link(rel="stylesheet" href="/css/styles.css")
 
@@ -32,7 +32,7 @@ html
                     h3 Karyotype
                 .col-sm-1
             .row
-                .container-fluid#list                    
+                .container-fluid#list
             .row
                 .col-sm-3
                     select.selectpicker#select-divisions(title="Select a Division..." data-width="100%")
@@ -41,7 +41,7 @@ html
                 .col-sm-3
                     select.selectpicker#select-assembly(title="Select a Karyotype..." data-width="100%" disabled)
                 .col-sm-1
-                    button.btn.btn-default#add Add
+                    button.btn.btn-primary#add.w-100 +
         .container-fluid#seq-container
             //- .row
             //-     .col

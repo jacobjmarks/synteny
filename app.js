@@ -42,4 +42,4 @@ app.listen(PORT, () => {
 })
 
 // Pug Templates
-fs.writeFileSync("./public/js/pugtemplate-listitem.js", pug.compileFileClient("./views/pugtemplate-listitem.pug", {name: "pugTemplate_listItem"}));
+fs.writeFileSync("./public/js/templates/listitem.js", pug.compileFileClient("./views/templates/listitem.pug", {name: "pugTemplate_listItem"}));
