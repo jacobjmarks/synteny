@@ -4,7 +4,7 @@ $(document).ready(() => {
     select = {
         divisions: $("#select-divisions"),
         species: $("#select-species"),
-        assembly: $("#select-assembly")
+        karyotypes: $("#select-karyotypes")
     }
 
     select.divisions.change(() => {
@@ -12,10 +12,10 @@ $(document).ready(() => {
     })
     
     select.species.change(() => {
-        populateAssembly(select.divisions.val(), select.species.val());
+        populateKaryotypes(select.divisions.val(), select.species.val());
     })
     
-    select.assembly.change(() => {
+    select.karyotypes.change(() => {
         
     })
 
@@ -26,7 +26,7 @@ $(document).ready(() => {
         addToList({
             division: select.divisions.val(),
             species: select.species.val(),
-            karyotype: select.assembly.val()
+            karyotype: select.karyotypes.val()
         });
     })
 })
@@ -50,9 +50,9 @@ function populateSpecies(division) {
     select.species.prop("disabled", true);
     select.species.selectpicker("refresh");
 
-    select.assembly.empty();
-    select.assembly.prop("disabled", true);
-    select.assembly.selectpicker("refresh");
+    select.karyotypes.empty();
+    select.karyotypes.prop("disabled", true);
+    select.karyotypes.selectpicker("refresh");
 
     $.ajax({
         url: `/getSpecies/${division}`,
@@ -71,23 +71,23 @@ function populateSpecies(division) {
     })
 }
 
-function populateAssembly(division, species) {
-    select.assembly.empty();
-    select.assembly.prop("disabled", true);
-    select.assembly.selectpicker("refresh");
+function populateKaryotypes(division, species) {
+    select.karyotypes.empty();
+    select.karyotypes.prop("disabled", true);
+    select.karyotypes.selectpicker("refresh");
 
     $.ajax({
-        url: `/getAssembly/${division}/${species}`,
+        url: `/getKaryotypes/${division}/${species}`,
         method: "POST"
     })
-    .done((karyotype) => {
-        console.log(karyotype);
-        for (let i = 0; i < karyotype.length; i++) {
-            select.assembly.append(`<option value="${karyotype[i]}">${karyotype[i]}</option>`)
+    .done((karyotypes) => {
+        console.log(karyotypes);
+        for (let i = 0; i < karyotypes.length; i++) {
+            select.karyotypes.append(`<option value="${karyotypes[i]}">${karyotypes[i]}</option>`)
         }
 
-        select.assembly.prop("disabled", false);
-        select.assembly.selectpicker("refresh");
+        select.karyotypes.prop("disabled", false);
+        select.karyotypes.selectpicker("refresh");
     })
 }
 
