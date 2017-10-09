@@ -1,6 +1,18 @@
 $(document).ready(() => {
     populateDivisions();
 
+    $("#select-divisions").change(() => {
+        populateSpecies($("#select-divisions").val());
+    })
+    
+    $("#select-species").change(() => {
+        populateAssembly($("#select-divisions").val(), $("#select-species").val());
+    })
+    
+    $("#select-assembly").change(() => {
+        
+    })
+
     // const NUM_SEQS = 3;
     // let alphabet = "ACGT";
 
@@ -34,13 +46,9 @@ function populateDivisions() {
         let select = $("#select-divisions");
         select.append(`<option>Ensembl</option>`)
         for (let i = 0; i < divisions.length; i++) {
-            select.append(`<option>${divisions[i]}</option>`)
+            select.append(`<option value="${divisions[i]}">${divisions[i]}</option>`)
         }
         select.selectpicker("refresh");
-
-        select.change(() => {
-            populateSpecies(select.val());
-        })
     })
 }
 
@@ -59,10 +67,6 @@ function populateSpecies(division) {
             select.append(`<option value="${s.name}" data-subtext="${s.common_name ? s.common_name : ''}">${s.display_name}</option>`)
         }
         select.selectpicker("refresh");
-
-        select.change(() => {
-            populateAssembly(division, select.val());
-        })
     })
 }
 
@@ -77,13 +81,9 @@ function populateAssembly(division, species) {
         let select = $("#select-assembly");
         select.empty();
         for (let i = 0; i < karyotype.length; i++) {
-            select.append(`<option>${karyotype[i]}</option>`)
+            select.append(`<option value="${karyotype[i]}">${karyotype[i]}</option>`)
         }
         select.selectpicker("refresh");
-
-        select.change(() => {
-            
-        })
     })
 }
 
