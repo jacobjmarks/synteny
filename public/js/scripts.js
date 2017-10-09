@@ -19,6 +19,17 @@ $(document).ready(() => {
         
     })
 
+    list_div = $("#list");
+    req_list = [];
+
+    $("#add").click(() => {
+        addToList({
+            division: select.divisions.val(),
+            species: select.species.val(),
+            karyotype: select.assembly.val()
+        });
+    })
+
     // const NUM_SEQS = 3;
     // let alphabet = "ACGT";
 
@@ -101,6 +112,15 @@ function populateAssembly(division, species) {
         select.assembly.prop("disabled", false);
         select.assembly.selectpicker("refresh");
     })
+}
+
+function addToList(selection) {
+    req_list.push(selection);
+
+    list_div.empty();
+    for (let i = 0; i < req_list.length; i++) {
+        list_div.append(pugTemplate_listItem({item: req_list[i]}));
+    }
 }
 
 const SEQUENCES = [];

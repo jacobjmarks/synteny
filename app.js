@@ -1,5 +1,7 @@
 const express = require("express");
 const app = express();
+const fs = require("fs");
+const pug = require("pug");
 
 const ensembl = require("./libs/ensembl.js")
 const ensemblGenomes = require("./libs/ensemblGenomes.js")
@@ -38,3 +40,6 @@ app.post("/getAssembly/:division/:species", (req, res) => {
 app.listen(PORT, () => {
     console.log("Server listening on port " + PORT);
 })
+
+// Pug Templates
+fs.writeFileSync("./public/js/pugtemplate-listitem.js", pug.compileFileClient("./views/pugtemplate-listitem.pug", {name: "pugTemplate_listItem"}));
