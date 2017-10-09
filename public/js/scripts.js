@@ -16,13 +16,14 @@ $(document).ready(() => {
     })
     
     select.karyotypes.change(() => {
-        
+        btn_add.prop("disabled", false);
     })
 
     list_div = $("#list");
     req_list = [];
 
-    $("#btn-add").click(() => {
+    btn_add = $("#btn-add");
+    btn_add.click(() => {
         addToList({
             division: select.divisions.val(),
             species: select.species.val(),
@@ -30,7 +31,8 @@ $(document).ready(() => {
         });
     })
 
-    $("#btn-done").click(() => {
+    btn_done = $("#btn-done");
+    btn_done.click(() => {
         pullSequences();
     })
 })
@@ -57,6 +59,8 @@ function populateSpecies(division) {
     select.karyotypes.empty();
     select.karyotypes.prop("disabled", true);
     select.karyotypes.selectpicker("refresh");
+    
+    btn_add.prop("disabled", true);
 
     $.ajax({
         url: `/getSpecies/${division}`,
@@ -79,6 +83,8 @@ function populateKaryotypes(division, species) {
     select.karyotypes.empty();
     select.karyotypes.prop("disabled", true);
     select.karyotypes.selectpicker("refresh");
+
+    btn_add.prop("disabled", true);
 
     $.ajax({
         url: `/getKaryotypes/${division}/${species}`,
@@ -108,9 +114,9 @@ function updateList() {
     }
     
     if (req_list.length > 0) {
-        $("#btn-done").attr("style", "display: block !important;");
+        btn_done.attr("style", "display: block !important;");
     } else {
-        $("#btn-done").hide();
+        btn_done.hide();
     }
 }
 
