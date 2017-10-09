@@ -114,13 +114,22 @@ function populateAssembly(division, species) {
     })
 }
 
-function addToList(selection) {
-    req_list.push(selection);
-
+function updateList() {
     list_div.empty();
     for (let i = 0; i < req_list.length; i++) {
-        list_div.append(pugTemplate_listItem({item: req_list[i]}));
+        let item = $(pugTemplate_listItem({item: req_list[i]}));
+        $(item).find("button").click(() => {
+            req_list.splice(i, 1);
+            updateList();
+        })
+
+        list_div.append(item);
     }
+}
+
+function addToList(selection) {
+    req_list.push(selection);
+    updateList();
 }
 
 const SEQUENCES = [];

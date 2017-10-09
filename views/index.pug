@@ -32,8 +32,6 @@ html
                     h3 Karyotype
                 .col-sm-1
             .row
-                .container-fluid#list
-            .row
                 .col-sm-3
                     select.selectpicker#select-divisions(title="Select a Division..." data-width="100%")
                 .col-sm-5
@@ -42,6 +40,8 @@ html
                     select.selectpicker#select-assembly(title="Select a Karyotype..." data-width="100%" disabled)
                 .col-sm-1
                     button.btn.btn-primary#add.w-100 +
+            .row
+                .container-fluid#list
         .container-fluid#seq-container
             //- .row
             //-     .col
