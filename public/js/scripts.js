@@ -50,7 +50,7 @@ function populateSpecies(division) {
         method: "POST"
     })
     .done((species) => {
-        species.sort((a, b) => a.assembly.localeCompare(b.assembly));
+        species.sort((a, b) => a.display_name.localeCompare(b.display_name));
         console.log(species);
         let select = $("#select-species");
         select.empty();
