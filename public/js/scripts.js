@@ -106,6 +106,12 @@ function updateList() {
 
         list_div.append(item);
     }
+    
+    if (req_list.length > 0) {
+        $("#btn-done").attr("style", "display: block !important;");
+    } else {
+        $("#btn-done").hide();
+    }
 }
 
 function addToList(selection) {
