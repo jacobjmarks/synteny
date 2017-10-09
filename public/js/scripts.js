@@ -1,15 +1,21 @@
 $(document).ready(() => {
     populateDivisions();
 
-    $("#select-divisions").change(() => {
-        populateSpecies($("#select-divisions").val());
+    select = {
+        divisions: $("#select-divisions"),
+        species: $("#select-species"),
+        assembly: $("#select-assembly")
+    }
+
+    select.divisions.change(() => {
+        populateSpecies(select.divisions.val());
     })
     
-    $("#select-species").change(() => {
-        populateAssembly($("#select-divisions").val(), $("#select-species").val());
+    select.species.change(() => {
+        populateAssembly(select.divisions.val(), select.species.val());
     })
     
-    $("#select-assembly").change(() => {
+    select.assembly.change(() => {
         
     })
 
@@ -43,16 +49,23 @@ function populateDivisions() {
         method: "POST"
     })
     .done((divisions) => {
-        let select = $("#select-divisions");
-        select.append(`<option>Ensembl</option>`)
+        select.divisions.append(`<option>Ensembl</option>`)
         for (let i = 0; i < divisions.length; i++) {
-            select.append(`<option value="${divisions[i]}">${divisions[i]}</option>`)
-        }
-        select.selectpicker("refresh");
+            select.divisions.append(`<option value="${divisions[i]}">${divisions[i]}</option>`)
+        }        
+        select.divisions.selectpicker("refresh");
     })
 }
 
 function populateSpecies(division) {
+    select.species.empty();
+    select.species.prop("disabled", true);
+    select.species.selectpicker("refresh");
+
+    select.assembly.empty();
+    select.assembly.prop("disabled", true);
+    select.assembly.selectpicker("refresh");
+
     $.ajax({
         url: `/getSpecies/${division}`,
         method: "POST"
@@ -60,30 +73,33 @@ function populateSpecies(division) {
     .done((species) => {
         species.sort((a, b) => a.display_name.localeCompare(b.display_name));
         console.log(species);
-        let select = $("#select-species");
-        select.empty();
         for (let i = 0; i < species.length; i++) {
             let s = species[i];
-            select.append(`<option value="${s.name}" data-subtext="${s.common_name ? s.common_name : ''}">${s.display_name}</option>`)
+            select.species.append(`<option value="${s.name}" data-subtext="${s.common_name ? s.common_name : ''}">${s.display_name}</option>`)
         }
-        select.selectpicker("refresh");
+
+        select.species.prop("disabled", false);
+        select.species.selectpicker("refresh");
     })
 }
 
 function populateAssembly(division, species) {
+    select.assembly.empty();
+    select.assembly.prop("disabled", true);
+    select.assembly.selectpicker("refresh");
+
     $.ajax({
         url: `/getAssembly/${division}/${species}`,
         method: "POST"
     })
     .done((karyotype) => {
-        // species.sort((a, b) => a.display_name.localeCompare(b.display_name));
         console.log(karyotype);
-        let select = $("#select-assembly");
-        select.empty();
         for (let i = 0; i < karyotype.length; i++) {
-            select.append(`<option value="${karyotype[i]}">${karyotype[i]}</option>`)
+            select.assembly.append(`<option value="${karyotype[i]}">${karyotype[i]}</option>`)
         }
-        select.selectpicker("refresh");
+
+        select.assembly.prop("disabled", false);
+        select.assembly.selectpicker("refresh");
     })
 }
 
