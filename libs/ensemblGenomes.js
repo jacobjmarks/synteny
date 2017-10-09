@@ -38,3 +38,15 @@ module.exports.info_assembly = function(species, callback) {
         callback(JSON.parse(body).karyotype);
     })
 }
+
+module.exports.sequence_region = function(species, karyotype, callback) {
+    request({
+        url: `http://rest.ensemblgenomes.org/sequence/region/${species}/${karyotype}:0..1000`,
+        method: "GET",
+        headers: {
+            "Content-Type": "text/plain"
+        }
+    }, (error, response, body) => {
+        callback(body);
+    })
+}
