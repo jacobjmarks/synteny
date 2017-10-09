@@ -22,12 +22,16 @@ $(document).ready(() => {
     list_div = $("#list");
     req_list = [];
 
-    $("#add").click(() => {
+    $("#btn-add").click(() => {
         addToList({
             division: select.divisions.val(),
             species: select.species.val(),
             karyotype: select.karyotypes.val()
         });
+    })
+
+    $("#btn-done").click(() => {
+        pullSequences();
     })
 })
 
@@ -107,4 +111,17 @@ function updateList() {
 function addToList(selection) {
     req_list.push(selection);
     updateList();
+}
+
+function pullSequences() {
+    for (let i = 0; i < req_list.length; i++) {
+        let req = req_list[i];
+        $.ajax({
+            url: `/getSequence/${req.division}/${req.species}/${req.karyotype}`,
+            method: "POST"
+        })
+        .done((sequence) => {
+            console.log(sequence);
+        })
+    }
 }
