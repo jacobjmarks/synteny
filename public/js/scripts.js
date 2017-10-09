@@ -35,6 +35,8 @@ $(document).ready(() => {
     btn_done.click(() => {
         pullSequences();
     })
+
+    seq_container = $("#sequences");
 })
 
 function populateDivisions() {
@@ -126,6 +128,8 @@ function addToList(selection) {
 }
 
 function pullSequences() {
+    seq_container.empty();
+    let seqs = [];
     for (let i = 0; i < req_list.length; i++) {
         let req = req_list[i];
         $.ajax({
@@ -133,7 +137,28 @@ function pullSequences() {
             method: "POST"
         })
         .done((sequence) => {
-            console.log(sequence);
+            seqs[i] = sequence;
+            if (seqs.length === req_list.length) {
+                drawSequences(seqs);
+            }
         })
+    }
+}
+
+function drawSequences(seqs) {
+    for (let i = 0; i < seqs.length; i++) {
+        seq_container.append(
+            $("<div/>")
+            .addClass("row")
+            .append(
+                $("<div/>")
+                .addClass("col-md-12")
+                .append(
+                    $("<p/>")
+                    .html(seqs[i])
+                    .css("word-wrap", "break-word")
+                )
+            )
+        )
     }
 }

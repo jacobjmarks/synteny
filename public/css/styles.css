@@ -28,3 +28,7 @@
 #btn-done {
     margin-top: 10px;
 }
+
+#sequences {
+    font-family: monospace;
+}
