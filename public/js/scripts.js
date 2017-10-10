@@ -180,14 +180,27 @@ function drawChart(match_matrix) {
                 if (datum > maxMatches) {maxMatches = datum}
                 // if (datum < minMatches) {minMatches = datum}
                 data.push({
-                    seqA: i,
-                    seqB: j,
+                    i: i,
+                    j: j,
                     matches: datum,
                     r: datum / 100
                 })
             }
         }
     }
+
+    const tooltip = d3.select("body")
+        .append("div")
+        .style("position", "absolute")
+        .style("visibility", "hidden")
+        .style("color", "white")
+        .style("padding", "8px")
+        .style("background-color", "#626D71")
+        .style("border-radius", "6px")
+        .style("text-align", "center")
+        .style("font-family", "monospace")
+        .style("width", "100px")
+        .text("");
 
     let svg = d3.select("#chart"),
         width = +svg.attr("width"),
@@ -199,6 +212,9 @@ function drawChart(match_matrix) {
         .append("circle")
         .attr("r", (d) => d.r)
         .style("fill", (d) => color(d.matches))
+        .on("mouseover", (d) => tooltip.html(`${d.i} | ${d.j}<br>${d.matches}`).style("visibility", "visible"))
+        .on("mousemove", () => tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px"))
+        .on("mouseout", () => tooltip.style("visibility", "hidden"))
     
     d3.forceSimulation(data)
         .force("x", d3.forceX()) 
