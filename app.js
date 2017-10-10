@@ -43,12 +43,13 @@ app.post("/getKaryotypes/:division/:species", (req, res) => {
 app.post("/getSequences", (req, res) => {
     let req_list = JSON.parse(req.body.req_list);
     console.log("POST /getSequences", req_list);
-    let seqs = [];
+    let seqs = new Array(req_list.length).fill(undefined);
     for (let i = 0; i < req_list.length; i++) {
         let req = req_list[i];
         let cb = (sequence) => {
             seqs[i] = sequence;
-            if (seqs.length === req_list.length) {
+            let all_seqs_set = seqs.map((seq) => seq != undefined).reduce((a, b) => a && b);
+            if (all_seqs_set) {
                 res.send(seqs);
             }
         };
