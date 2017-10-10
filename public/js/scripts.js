@@ -1,5 +1,9 @@
 $(document).ready(() => {
-    populateDivisions();
+    spinner = {
+        divisions: $("#spinner-divisions"),
+        species: $("#spinner-species"),
+        karyotype: $("#spinner-karyotype")
+    }
 
     select = {
         divisions: $("#select-divisions"),
@@ -37,9 +41,12 @@ $(document).ready(() => {
     })
 
     seq_container = $("#sequences");
+
+    populateDivisions();
 })
 
 function populateDivisions() {
+    spinner.divisions.removeClass("hidden");
     $.ajax({
         url: "/getDivisions",
         method: "POST"
@@ -50,10 +57,12 @@ function populateDivisions() {
             select.divisions.append(`<option value="${divisions[i]}">${divisions[i]}</option>`)
         }        
         select.divisions.selectpicker("refresh");
+        spinner.divisions.addClass("hidden");
     })
 }
 
 function populateSpecies(division) {
+    spinner.species.removeClass("hidden");
     select.species.empty();
     select.species.prop("disabled", true);
     select.species.selectpicker("refresh");
@@ -78,10 +87,12 @@ function populateSpecies(division) {
 
         select.species.prop("disabled", false);
         select.species.selectpicker("refresh");
+        spinner.species.addClass("hidden");
     })
 }
 
 function populateKaryotypes(division, species) {
+    spinner.karyotype.removeClass("hidden");
     select.karyotypes.empty();
     select.karyotypes.prop("disabled", true);
     select.karyotypes.selectpicker("refresh");
@@ -100,6 +111,7 @@ function populateKaryotypes(division, species) {
 
         select.karyotypes.prop("disabled", false);
         select.karyotypes.selectpicker("refresh");
+        spinner.karyotype.addClass("hidden");
     })
 }
 
