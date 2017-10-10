@@ -44,7 +44,7 @@ app.post("/getKaryotypes/:division/:species", (req, res) => {
 app.post("/getSequences", (req, res) => {
     let req_list = JSON.parse(req.body.req_list);
     console.log("POST /getSequences", req_list);
-    sequences.pullAndCompare(req_list, (results) => {
+    sequences.pullAndCompareAll(req_list, (results) => {
         res.send(results);
     });
 })

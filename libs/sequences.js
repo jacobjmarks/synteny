@@ -1,9 +1,18 @@
 const ensembl = require("./ensembl.js");
 const ensemblGenomes = require("./ensemblGenomes.js");
 
-module.exports.pullAndCompare = function(req_list, callback) {
+module.exports.pullAndCompareAll = function(req_list, callback) {
     pull(req_list, (sequences) => {
-        callback(sequences);
+        let match_matrix = [];
+        console.log(match_matrix);
+        for (let i = 0; i < sequences.length - 1; i++) {
+            match_matrix.push(new Array(sequences.length).fill(0));
+            for (let j = i + 1; j < sequences.length; j++) {
+                console.log(i, j);
+                match_matrix[i][j] = compare(sequences[i], sequences[j]);
+            }
+        }
+        callback(match_matrix);
     })
 }
 
@@ -20,4 +29,22 @@ function pull(req_list, callback) {
         };
         (req.division === "Ensembl") ? ensembl.sequence_region(req.species, req.karyotype, cb) : ensemblGenomes.sequence_region(req.species, req.karyotype, cb);
     }
+}
+
+function compare(seqA, seqB) {
+    const min_kmer_length = 4;
+    let common_kmers = 0;
+    for (let kmer_len = seqA.length; kmer_len >= min_kmer_length; kmer_len--) {
+        for (let i = 0; i <= seqA.length - kmer_len; i++) {
+            let kmer = seqA.substr(i, kmer_len);
+            if (kmer.indexOf('N') !== -1) { break }            
+            let searchIndex = 0;
+            while (seqB.indexOf(kmer, searchIndex) !== -1) {
+                let index = seqB.indexOf(kmer, searchIndex);
+                common_kmers++;
+                searchIndex = index + 1;
+            }
+        }
+    }
+    return common_kmers;
 }
