@@ -171,10 +171,14 @@ function drawChart(match_matrix) {
     console.log(match_matrix);
     $("#chart").empty();
     let data = [];
+    // let minMatches = Number.MAX_SAFE_INTEGER;
+    let maxMatches = Number.MIN_SAFE_INTEGER;
     for (let i = 0; i < match_matrix.length; i++) {
         for (let j = 0; j < match_matrix[i].length; j++) {
             let datum = match_matrix[i][j];
             if (datum != null) {
+                if (datum > maxMatches) {maxMatches = datum}
+                // if (datum < minMatches) {minMatches = datum}
                 data.push({
                     seqA: i,
                     seqB: j,
@@ -185,15 +189,16 @@ function drawChart(match_matrix) {
         }
     }
 
-    console.log(data);
-
     let svg = d3.select("#chart"),
         width = +svg.attr("width"),
         height = +svg.attr("height");
 
+    let color = d3.scaleSequential(d3.interpolateBlues).domain([0, maxMatches]);    
+
     svg.selectAll("circle").data(data).enter()
         .append("circle")
-        .attr("r", (d) => d.r);
+        .attr("r", (d) => d.r)
+        .style("fill", (d) => color(d.matches))
     
     d3.forceSimulation(data)
         .force("x", d3.forceX()) 
