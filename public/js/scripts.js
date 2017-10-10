@@ -37,7 +37,7 @@ $(document).ready(() => {
 
     btn_done = $("#btn-done");
     btn_done.click(() => {
-        pullSequences();
+        getSequences();
     })
 
     seq_container = $("#sequences");
@@ -128,9 +128,9 @@ function updateList() {
     }
     
     if (req_list.length > 0) {
-        btn_done.attr("style", "display: block !important;");
+        btn_done.removeClass("hidden");
     } else {
-        btn_done.hide();
+        btn_done.addClass("hidden");
     }
 }
 
@@ -139,22 +139,32 @@ function addToList(selection) {
     updateList();
 }
 
-function pullSequences() {
+function getSequences() {
     seq_container.empty();
-    let seqs = [];
-    for (let i = 0; i < req_list.length; i++) {
-        let req = req_list[i];
-        $.ajax({
-            url: `/getSequence/${req.division}/${req.species}/${req.karyotype}`,
-            method: "POST"
-        })
-        .done((sequence) => {
-            seqs[i] = sequence;
-            if (seqs.length === req_list.length) {
-                drawSequences(seqs);
-            }
-        })
-    }
+    $.ajax({
+        url: "/getSequences",
+        method: "POST",
+        data: {
+            req_list: JSON.stringify(req_list)
+        }
+    })
+    .done((sequences) => {
+        drawSequences(sequences);
+    })
+    // let seqs = [];
+    // for (let i = 0; i < req_list.length; i++) {
+    //     let req = req_list[i];
+    //     $.ajax({
+    //         url: `/getSequence/${req.division}/${req.species}/${req.karyotype}`,
+    //         method: "POST"
+    //     })
+    //     .done((sequence) => {
+    //         seqs[i] = sequence;
+    //         if (seqs.length === req_list.length) {
+    //             drawSequences(seqs);
+    //         }
+    //     })
+    // }
 }
 
 function drawSequences(seqs) {

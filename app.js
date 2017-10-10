@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const fs = require("fs");
 const pug = require("pug");
+const bodyParser = require("body-parser");
 
 const ensembl = require("./libs/ensembl.js")
 const ensemblGenomes = require("./libs/ensemblGenomes.js")
@@ -9,6 +10,8 @@ const ensemblGenomes = require("./libs/ensemblGenomes.js")
 const PORT = 3000;
 
 app.use(express.static("public"));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
 
 app.get('/', (req, res) => {
     console.log("GET /");
@@ -37,14 +40,30 @@ app.post("/getKaryotypes/:division/:species", (req, res) => {
     (division === "Ensembl") ? ensembl.info_assembly(species, cb) : ensemblGenomes.info_assembly(species, cb);
 })
 
-app.post("/getSequence/:division/:species/:karyotype", (req, res) => {
-    let division = req.params.division;
-    let species = req.params.species;
-    let karyotype = req.params.karyotype;
-    console.log(`POST /getSequence/${species}/${karyotype}`);
-    let cb = (sequence) => {res.send(sequence)};
-    (division === "Ensembl") ? ensembl.sequence_region(species, karyotype, cb) : ensemblGenomes.sequence_region(species, karyotype, cb);
+app.post("/getSequences", (req, res) => {
+    let req_list = JSON.parse(req.body.req_list);
+    console.log("POST /getSequences", req_list);
+    let seqs = [];
+    for (let i = 0; i < req_list.length; i++) {
+        let req = req_list[i];
+        let cb = (sequence) => {
+            seqs[i] = sequence;
+            if (seqs.length === req_list.length) {
+                res.send(seqs);
+            }
+        };
+        (req.division === "Ensembl") ? ensembl.sequence_region(req.species, req.karyotype, cb) : ensemblGenomes.sequence_region(req.species, req.karyotype, cb);
+    }
 })
+
+// app.post("/getSequence/:division/:species/:karyotype", (req, res) => {
+//     let division = req.params.division;
+//     let species = req.params.species;
+//     let karyotype = req.params.karyotype;
+//     console.log(`POST /getSequence/${species}/${karyotype}`);
+//     let cb = (sequence) => {res.send(sequence)};
+//     (division === "Ensembl") ? ensembl.sequence_region(species, karyotype, cb) : ensemblGenomes.sequence_region(species, karyotype, cb);
+// })
 
 app.listen(PORT, () => {
     console.log("Server listening on port " + PORT);
