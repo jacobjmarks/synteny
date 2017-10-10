@@ -41,9 +41,9 @@ app.post("/getKaryotypes/:division/:species", (req, res) => {
     (division === "Ensembl") ? ensembl.info_assembly(species, cb) : ensemblGenomes.info_assembly(species, cb);
 })
 
-app.post("/getSequences", (req, res) => {
+app.post("/compareSequences", (req, res) => {
     let req_list = JSON.parse(req.body.req_list);
-    console.log("POST /getSequences", req_list);
+    console.log("POST /compareSequences", req_list);
     sequences.pullAndCompareAll(req_list, (results) => {
         res.send(results);
     });

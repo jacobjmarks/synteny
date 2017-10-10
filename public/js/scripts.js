@@ -37,7 +37,7 @@ $(document).ready(() => {
 
     btn_done = $("#btn-done");
     btn_done.click(() => {
-        getSequences();
+        compareSequences();
     })
 
     seq_container = $("#sequences");
@@ -139,17 +139,17 @@ function addToList(selection) {
     updateList();
 }
 
-function getSequences() {
+function compareSequences() {
     seq_container.empty();
     $.ajax({
-        url: "/getSequences",
+        url: "/compareSequences",
         method: "POST",
         data: {
             req_list: JSON.stringify(req_list)
         }
     })
-    .done((sequences) => {
-        drawSequences(sequences);
+    .done((match_matrix) => {
+        drawChart(match_matrix);
     })
     // let seqs = [];
     // for (let i = 0; i < req_list.length; i++) {
@@ -167,20 +167,47 @@ function getSequences() {
     // }
 }
 
-function drawSequences(seqs) {
-    for (let i = 0; i < seqs.length; i++) {
-        seq_container.append(
-            $("<div/>")
-            .addClass("row")
-            .append(
-                $("<div/>")
-                .addClass("col-md-12")
-                .append(
-                    $("<p/>")
-                    .html(seqs[i])
-                    .css("word-wrap", "break-word")
-                )
-            )
-        )
+function drawChart(match_matrix) {
+    console.log(match_matrix);
+    $("#chart").empty();
+    let data = [];
+    for (let i = 0; i < match_matrix.length; i++) {
+        for (let j = 0; j < match_matrix[i].length; j++) {
+            let datum = match_matrix[i][j];
+            if (datum != null) {
+                data.push({
+                    seqA: i,
+                    seqB: j,
+                    matches: datum
+                })
+            }
+        }
     }
+
+    console.log(data);
+
+    let svg = d3.select("#chart"),
+        width = +svg.attr("width"),
+        height = +svg.attr("height");
+
+    svg.selectAll("circle").data(data).enter()
+        .append("circle")
+        .attr("r", (d) => d.matches / 100)
+        .attr("transform", `translate(${[width / 2, height / 2]})`);         
+           
+    // for (let i = 0; i < seqs.length; i++) {
+    //     seq_container.append(
+    //         $("<div/>")
+    //         .addClass("row")
+    //         .append(
+    //             $("<div/>")
+    //             .addClass("col-md-12")
+    //             .append(
+    //                 $("<p/>")
+    //                 .html(seqs[i])
+    //                 .css("word-wrap", "break-word")
+    //             )
+    //         )
+    //     )
+    // }
 }

@@ -4,12 +4,11 @@ const ensemblGenomes = require("./ensemblGenomes.js");
 module.exports.pullAndCompareAll = function(req_list, callback) {
     pull(req_list, (sequences) => {
         let match_matrix = [];
-        console.log(match_matrix);
         for (let i = 0; i < sequences.length - 1; i++) {
-            match_matrix.push(new Array(sequences.length).fill(0));
+            match_matrix.push(new Array(sequences.length).fill(null));
             for (let j = i + 1; j < sequences.length; j++) {
-                console.log(i, j);
                 match_matrix[i][j] = compare(sequences[i], sequences[j]);
+                console.log(`${i} ${j}\t${match_matrix[i][j]}`);
             }
         }
         callback(match_matrix);
