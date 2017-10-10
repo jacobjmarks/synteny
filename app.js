@@ -4,8 +4,9 @@ const fs = require("fs");
 const pug = require("pug");
 const bodyParser = require("body-parser");
 
-const ensembl = require("./libs/ensembl.js")
-const ensemblGenomes = require("./libs/ensemblGenomes.js")
+const ensembl = require("./libs/ensembl.js");
+const ensemblGenomes = require("./libs/ensemblGenomes.js");
+const sequences = require("./libs/sequences.js");
 
 const PORT = 3000;
 
@@ -43,18 +44,9 @@ app.post("/getKaryotypes/:division/:species", (req, res) => {
 app.post("/getSequences", (req, res) => {
     let req_list = JSON.parse(req.body.req_list);
     console.log("POST /getSequences", req_list);
-    let seqs = new Array(req_list.length).fill(undefined);
-    for (let i = 0; i < req_list.length; i++) {
-        let req = req_list[i];
-        let cb = (sequence) => {
-            seqs[i] = sequence;
-            let all_seqs_set = seqs.map((seq) => seq != undefined).reduce((a, b) => a && b);
-            if (all_seqs_set) {
-                res.send(seqs);
-            }
-        };
-        (req.division === "Ensembl") ? ensembl.sequence_region(req.species, req.karyotype, cb) : ensemblGenomes.sequence_region(req.species, req.karyotype, cb);
-    }
+    sequences.pullAndCompare(req_list, (results) => {
+        res.send(results);
+    });
 })
 
 // app.post("/getSequence/:division/:species/:karyotype", (req, res) => {
