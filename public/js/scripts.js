@@ -178,7 +178,8 @@ function drawChart(match_matrix) {
                 data.push({
                     seqA: i,
                     seqB: j,
-                    matches: datum
+                    matches: datum,
+                    r: datum / 100
                 })
             }
         }
@@ -192,9 +193,17 @@ function drawChart(match_matrix) {
 
     svg.selectAll("circle").data(data).enter()
         .append("circle")
-        .attr("r", (d) => d.matches / 100)
-        .attr("transform", `translate(${[width / 2, height / 2]})`);         
-           
+        .attr("r", (d) => d.r);
+    
+    d3.forceSimulation(data)
+        .force("x", d3.forceX()) 
+        .force("y", d3.forceY())
+        .force("collide", d3.forceCollide().radius((d) => d.r))
+        .on("tick", () => {
+            svg.selectAll("circle")
+                .attr("transform", (d) => `translate(${[d.x + width/2, d.y + width/2]})`)
+        })
+
     // for (let i = 0; i < seqs.length; i++) {
     //     seq_container.append(
     //         $("<div/>")
