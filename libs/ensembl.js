@@ -32,7 +32,7 @@ module.exports.sequence_region = function(species, karyotypes, callback) {
         headers: {
             "Content-Type": "application/json"
         },
-        qs: {
+        json: {
             "regions" : (() => {
                 let regions = [];
                 for (let i = 0; i < karyotypes.length; i++) {
@@ -42,6 +42,6 @@ module.exports.sequence_region = function(species, karyotypes, callback) {
             })()
         }
     }, (error, response, body) => {
-        callback(JSON.parse(body));
+        callback(body);
     })
 }
