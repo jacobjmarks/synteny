@@ -176,8 +176,12 @@ function drawChart(match_matrix) {
                 if (datum > maxMatches) {maxMatches = datum}
                 // if (datum < minMatches) {minMatches = datum}
                 data.push({
-                    a: alphabet[i],
-                    b: alphabet[j],
+                    a_alpha_index: alphabet[i],
+                    a_name: req_list[i].display_name,
+                    a_karyotypes: req_list[i].karyotypes,
+                    b_alpha_index: alphabet[j],
+                    b_name: req_list[j].display_name,
+                    b_karyotypes: req_list[j].karyotypes,
                     matches: datum
                 })
 
@@ -196,7 +200,8 @@ function drawChart(match_matrix) {
         .style("border-radius", "6px")
         .style("text-align", "center")
         .style("font-family", "monospace")
-        .style("width", "100px")
+        .style("white-space", "nowrap")
+        .style("width", "min-content")
         .text("");
 
     let svg = d3.select("#chart"),
@@ -221,12 +226,15 @@ function drawChart(match_matrix) {
     nodes.append("circle")
         .attr("r", (d) => (d.matches > 0) ? calcDrawRadius(d.matches) : 0)
         .style("fill", (d) => color(d.matches))
-        .on("mouseover", (d) => tooltip.html(`${d.a} | ${d.b}<br>${d.matches}`).style("visibility", "visible"))
+        .on("mouseover", (d, i) => 
+            tooltip.html(
+                `${d.a_name}:${d.a_karyotypes.join(",")} | ${d.b_name}:${d.b_karyotypes.join(",")}<br>${d.matches}`
+            ).style("visibility", "visible"))
         .on("mousemove", () => tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px"))
         .on("mouseout", () => tooltip.style("visibility", "hidden"))
 
     nodes.append("text")
-        .text((d) => (d.matches > 0) ? `${d.a} | ${d.b}` : "")
+        .text((d) => (d.matches > 0) ? `${d.a_alpha_index} | ${d.b_alpha_index}` : "")
         .style("fill", (d) => textColor(d.matches))
     
     d3.forceSimulation(data)
