@@ -19,21 +19,14 @@ function pull(req_list, callback) {
     let seqs = new Array(req_list.length).fill(undefined);
     for (let i = 0; i < req_list.length; i++) {
         let req = req_list[i];
-        let this_seq = new Array(req.karyotype.length).fill("");
-        for (let j = 0; j < req.karyotype.length; j++) {
-            let cb = (sequence) => {
-                this_seq[j] += sequence;
-                let this_seq_set = this_seq.map((seq) => seq != "").reduce((a, b) => a && b);
-                if (this_seq_set) {
-                    seqs[i] = this_seq.reduce((a, b) => a.concat(b));
-                }
-                let all_seqs_set = seqs.map((seq) => seq != undefined).reduce((a, b) => a && b)
-                if (all_seqs_set) {
-                    callback(seqs);
-                }
-            };
-            (req.division === "Ensembl") ? ensembl.sequence_region(req.species, req.karyotype[j], cb) : ensemblGenomes.sequence_region(req.species, req.karyotype[j], cb);
-        }
+        let cb = (results) => {
+            seqs[i] += results.map((result) => result.seq);
+            let all_seqs_set = seqs.map((seq) => seq != undefined).reduce((a, b) => a && b)
+            if (all_seqs_set) {
+                callback(seqs);
+            }
+        };
+        (req.division === "Ensembl") ? ensembl.sequence_region(req.species, req.karyotypes, cb) : ensemblGenomes.sequence_region(req.species, req.karyotypes, cb);
     }
 }
 

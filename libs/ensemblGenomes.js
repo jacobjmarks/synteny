@@ -39,12 +39,22 @@ module.exports.info_assembly = function(species, callback) {
     })
 }
 
-module.exports.sequence_region = function(species, karyotype, callback) {
+module.exports.sequence_region = function(species, karyotypes, callback) {
+    const seq_length = 1000;
     request({
-        url: `http://rest.ensemblgenomes.org/sequence/region/${species}/${karyotype}:0..1000`,
-        method: "GET",
+        url: `http://rest.ensemblgenomes.org/sequence/region/${species}`,
+        method: "POST",
         headers: {
-            "Content-Type": "text/plain"
+            "Content-Type": "application/json"
+        },
+        json: {
+            "regions" : (() => {
+                let regions = [];
+                for (let i = 0; i < karyotypes.length; i++) {
+                    regions.push(`${karyotypes[i]}:0..${seq_length}`)
+                }
+                return regions;
+            })()
         }
     }, (error, response, body) => {
         callback(body);

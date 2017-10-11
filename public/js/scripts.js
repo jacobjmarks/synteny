@@ -31,7 +31,7 @@ $(document).ready(() => {
         addToList({
             division: select.divisions.val(),
             species: select.species.val(),
-            karyotype: select.karyotypes.val()
+            karyotypes: select.karyotypes.val()
         });
         select.karyotypes.selectpicker("deselectAll");
     })
