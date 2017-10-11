@@ -7,7 +7,7 @@ module.exports.pullAndCompareAll = function(req_list, callback) {
         for (let i = 0; i < sequences.length - 1; i++) {
             match_matrix.push(new Array(sequences.length).fill(null));
             for (let j = i + 1; j < sequences.length; j++) {
-                match_matrix[i][j] = compareBloom(sequences[i], sequences[j]);
+                match_matrix[i][j] = compare(sequences[i], sequences[j]);
                 console.log(`${i} ${j}\t${match_matrix[i][j]}`);
             }
         }
@@ -16,12 +16,12 @@ module.exports.pullAndCompareAll = function(req_list, callback) {
 }
 
 function pull(req_list, callback) {
-    let seqs = new Array(req_list.length).fill(undefined);
+    let seqs = new Array(req_list.length).fill("");
     for (let i = 0; i < req_list.length; i++) {
         let req = req_list[i];
         let cb = (results) => {
-            seqs[i] += results.map((result) => result.seq);
-            let all_seqs_set = seqs.map((seq) => seq != undefined).reduce((a, b) => a && b)
+            seqs[i] += results.map((result) => result.seq).reduce((a, b) => a.concat(b));
+            let all_seqs_set = seqs.map((seq) => seq != "").reduce((a, b) => a && b)
             if (all_seqs_set) {
                 callback(seqs);
             }
@@ -72,8 +72,7 @@ function compareBloom(seqA, seqB) {
 }
 
 function seqToIntArray(seq) {
-    console.log(seq);
-    let seqBytes = seq.length;
+    let seqBytes = Math.ceil(seq.length / 2);
     let seqBuffer = new ArrayBuffer(seqBytes);
     let uint8view = new Uint8Array(seqBuffer);
 
