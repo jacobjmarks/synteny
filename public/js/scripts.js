@@ -33,6 +33,7 @@ $(document).ready(() => {
             species: select.species.val(),
             karyotype: select.karyotypes.val()
         });
+        select.karyotypes.selectpicker("deselectAll");
     })
 
     btn_done = $("#btn-done");
