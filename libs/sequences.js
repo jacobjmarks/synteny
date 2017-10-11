@@ -1,13 +1,13 @@
 const ensembl = require("./ensembl.js");
 const ensemblGenomes = require("./ensemblGenomes.js");
 
-module.exports.pullAndCompareAll = function(req_list, callback) {
+module.exports.pullAndCompareAll = function(req_list, use_bloom, callback) {
     pull(req_list, (sequences) => {
         let match_matrix = [];
         for (let i = 0; i < sequences.length - 1; i++) {
             match_matrix.push(new Array(sequences.length).fill(null));
             for (let j = i + 1; j < sequences.length; j++) {
-                match_matrix[i][j] = compare(sequences[i], sequences[j]);
+                match_matrix[i][j] = (use_bloom) ? compareBloom(sequences[i], sequences[j]) : compare(sequences[i], sequences[j]);
                 console.log(`${i} ${j}\t${match_matrix[i][j]}`);
             }
         }
