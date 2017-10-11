@@ -19,12 +19,12 @@ function pull(req_list, callback) {
     let seqs = new Array(req_list.length).fill(undefined);
     for (let i = 0; i < req_list.length; i++) {
         let req = req_list[i];
-        let this_seq = new Array(req.karyotype.length).fill(undefined);
+        let this_seq = new Array(req.karyotype.length).fill("");
         for (let j = 0; j < req.karyotype.length; j++) {
             let cb = (sequence) => {
                 this_seq[j] += sequence;
-                let this_seq_set = this_seq.map((seq) => seq != undefined).reduce((a, b) => a && b);
-                if (this_seq_set) {                    
+                let this_seq_set = this_seq.map((seq) => seq != "").reduce((a, b) => a && b);
+                if (this_seq_set) {
                     seqs[i] = this_seq.reduce((a, b) => a.concat(b));
                 }
                 let all_seqs_set = seqs.map((seq) => seq != undefined).reduce((a, b) => a && b)
@@ -43,7 +43,7 @@ function compare(seqA, seqB) {
     for (let kmer_len = seqA.length; kmer_len >= min_kmer_length; kmer_len--) {
         for (let i = 0; i <= seqA.length - kmer_len; i++) {
             let kmer = seqA.substr(i, kmer_len);
-            if (kmer.indexOf('N') !== -1) { break }            
+            if (kmer.indexOf('N') !== -1) { break }
             let searchIndex = 0;
             while (seqB.indexOf(kmer, searchIndex) !== -1) {
                 let index = seqB.indexOf(kmer, searchIndex);
