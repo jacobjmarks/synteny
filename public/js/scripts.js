@@ -30,10 +30,13 @@ $(document).ready(() => {
 
     btn_add = $("#btn-add");
     btn_add.click(() => {
+        let selected_specie = $("#select-species option:checked");
         addToList({
             division: select.divisions.val(),
             species: select.species.val(),
-            karyotypes: select.karyotypes.val()
+            karyotypes: select.karyotypes.val(),
+            common_name: selected_specie.attr("data-subtext"),
+            display_name: selected_specie.html()
         });
         select.karyotypes.selectpicker("deselectAll");
     })
