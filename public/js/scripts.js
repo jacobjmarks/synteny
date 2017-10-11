@@ -178,11 +178,6 @@ function drawChart(match_matrix) {
         }
     }
 
-    const calcDrawRadius = function(matches) {
-        const maxRadius = 100;
-        return (matches / maxMatches) * maxRadius;
-    }
-
     const tooltip = d3.select("body")
         .append("div")
         .style("position", "absolute")
@@ -209,6 +204,12 @@ function drawChart(match_matrix) {
 
     let nodes = svg.selectAll(".node").data(data).enter().append("g");
 
+    const calcDrawRadius = function(matches) {
+        const minRadius = 15;
+        const maxRadius = 100;
+        return minRadius + (matches / maxMatches) * (maxRadius - minRadius);
+    }
+
     nodes.append("circle")
         .attr("r", (d) => calcDrawRadius(d.matches))
         .style("fill", (d) => color(d.matches))
@@ -219,7 +220,6 @@ function drawChart(match_matrix) {
     nodes.append("text")
         .text((d) => `${d.i} | ${d.j}`)
         .style("fill", (d) => textColor(d.matches))
-        .attr("text-align", "center")
     
     d3.forceSimulation(data)
         .force("x", d3.forceX())
