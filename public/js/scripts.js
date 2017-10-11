@@ -203,22 +203,28 @@ function drawChart(match_matrix) {
 
     d3.select("#matrix-div").attr("transform", `translate(${[0, header_height]})`)
 
-    let color = d3.scaleSequential(d3.interpolateBlues).domain([0, maxMatches]);    
+    const color = d3.scaleSequential(d3.interpolateBlues).domain([0, maxMatches]);
+    const textColor = d3.scaleSequential(d3.interpolateGreys).domain([maxMatches, 0]);
 
-    svg.selectAll("circle").data(data).enter()
-        .append("circle")
+    let nodes = svg.selectAll(".node").data(data).enter().append("g");
+
+    nodes.append("circle")
         .attr("r", (d) => calcDrawRadius(d.matches))
         .style("fill", (d) => color(d.matches))
         .on("mouseover", (d) => tooltip.html(`${d.i} | ${d.j}<br>${d.matches}`).style("visibility", "visible"))
         .on("mousemove", () => tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px"))
         .on("mouseout", () => tooltip.style("visibility", "hidden"))
+
+    nodes.append("text")
+        .text((d) => `${d.i} | ${d.j}`)
+        .style("fill", (d) => textColor(d.matches))
+        .attr("text-align", "center")
     
     d3.forceSimulation(data)
         .force("x", d3.forceX())
         .force("y", d3.forceY())
         .force("collide", d3.forceCollide().radius((d) => calcDrawRadius(d.matches) + 5))
         .on("tick", () => {
-            svg.selectAll("circle")
-                .attr("transform", (d) => `translate(${[d.x + width/2, d.y + height/2 + header_height/2]})`)
+            nodes.attr("transform", (d) => `translate(${[d.x + width/2, d.y + height/2 + header_height/2]})`)
         })
 }
