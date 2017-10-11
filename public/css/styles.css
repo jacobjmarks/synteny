@@ -59,3 +59,7 @@ body .container:first-child button {
 #chart circle {
     pointer-events: all;
 }
+
+#matrix-div {
+    font-family: monospace;
+}

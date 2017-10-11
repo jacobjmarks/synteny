@@ -1,4 +1,6 @@
 $(document).ready(() => {
+    alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
     spinner = {
         divisions: $("#spinner-divisions"),
         species: $("#spinner-species"),
@@ -119,7 +121,10 @@ function populateKaryotypes(division, species) {
 function updateList() {
     list_div.empty();
     for (let i = 0; i < req_list.length; i++) {
-        let item = $(pugTemplate_listItem({item: req_list[i]}));
+        let item = $(pugTemplate_listItem({
+            index: alphabet[i],
+            item: req_list[i]
+        }));
         $(item).find("button").click(() => {
             req_list.splice(i, 1);
             updateList();
@@ -168,12 +173,12 @@ function drawChart(match_matrix) {
                 if (datum > maxMatches) {maxMatches = datum}
                 // if (datum < minMatches) {minMatches = datum}
                 data.push({
-                    i: i,
-                    j: j,
+                    a: alphabet[i],
+                    b: alphabet[j],
                     matches: datum
                 })
 
-                $("#matrix-div").append(`<p>${i} ${j}\t${datum}</p>`)
+                $("#matrix-div").append(`<p>${alphabet[i]} ${alphabet[j]}\t${datum}</p>`)
             }
         }
     }
@@ -213,12 +218,12 @@ function drawChart(match_matrix) {
     nodes.append("circle")
         .attr("r", (d) => (d.matches > 0) ? calcDrawRadius(d.matches) : 0)
         .style("fill", (d) => color(d.matches))
-        .on("mouseover", (d) => tooltip.html(`${d.i} | ${d.j}<br>${d.matches}`).style("visibility", "visible"))
+        .on("mouseover", (d) => tooltip.html(`${d.a} | ${d.b}<br>${d.matches}`).style("visibility", "visible"))
         .on("mousemove", () => tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px"))
         .on("mouseout", () => tooltip.style("visibility", "hidden"))
 
     nodes.append("text")
-        .text((d) => (d.matches > 0) ? `${d.i} | ${d.j}` : "")
+        .text((d) => (d.matches > 0) ? `${d.a} | ${d.b}` : "")
         .style("fill", (d) => textColor(d.matches))
     
     d3.forceSimulation(data)
