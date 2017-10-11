@@ -211,14 +211,14 @@ function drawChart(match_matrix) {
     }
 
     nodes.append("circle")
-        .attr("r", (d) => calcDrawRadius(d.matches))
+        .attr("r", (d) => (d.matches > 0) ? calcDrawRadius(d.matches) : 0)
         .style("fill", (d) => color(d.matches))
         .on("mouseover", (d) => tooltip.html(`${d.i} | ${d.j}<br>${d.matches}`).style("visibility", "visible"))
         .on("mousemove", () => tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px"))
         .on("mouseout", () => tooltip.style("visibility", "hidden"))
 
     nodes.append("text")
-        .text((d) => `${d.i} | ${d.j}`)
+        .text((d) => (d.matches > 0) ? `${d.i} | ${d.j}` : "")
         .style("fill", (d) => textColor(d.matches))
     
     d3.forceSimulation(data)
