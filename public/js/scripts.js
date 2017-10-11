@@ -151,20 +151,6 @@ function compareSequences() {
     .done((match_matrix) => {
         drawChart(match_matrix);
     })
-    // let seqs = [];
-    // for (let i = 0; i < req_list.length; i++) {
-    //     let req = req_list[i];
-    //     $.ajax({
-    //         url: `/getSequence/${req.division}/${req.species}/${req.karyotype}`,
-    //         method: "POST"
-    //     })
-    //     .done((sequence) => {
-    //         seqs[i] = sequence;
-    //         if (seqs.length === req_list.length) {
-    //             drawSequences(seqs);
-    //         }
-    //     })
-    // }
 }
 
 function drawChart(match_matrix) {
@@ -217,27 +203,11 @@ function drawChart(match_matrix) {
         .on("mouseout", () => tooltip.style("visibility", "hidden"))
     
     d3.forceSimulation(data)
-        .force("x", d3.forceX()) 
+        .force("x", d3.forceX())
         .force("y", d3.forceY())
         .force("collide", d3.forceCollide().radius((d) => d.r))
         .on("tick", () => {
             svg.selectAll("circle")
                 .attr("transform", (d) => `translate(${[d.x + width/2, d.y + width/2]})`)
         })
-
-    // for (let i = 0; i < seqs.length; i++) {
-    //     seq_container.append(
-    //         $("<div/>")
-    //         .addClass("row")
-    //         .append(
-    //             $("<div/>")
-    //             .addClass("col-md-12")
-    //             .append(
-    //                 $("<p/>")
-    //                 .html(seqs[i])
-    //                 .css("word-wrap", "break-word")
-    //             )
-    //         )
-    //     )
-    // }
 }

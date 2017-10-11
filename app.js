@@ -49,15 +49,6 @@ app.post("/compareSequences", (req, res) => {
     });
 })
 
-// app.post("/getSequence/:division/:species/:karyotype", (req, res) => {
-//     let division = req.params.division;
-//     let species = req.params.species;
-//     let karyotype = req.params.karyotype;
-//     console.log(`POST /getSequence/${species}/${karyotype}`);
-//     let cb = (sequence) => {res.send(sequence)};
-//     (division === "Ensembl") ? ensembl.sequence_region(species, karyotype, cb) : ensemblGenomes.sequence_region(species, karyotype, cb);
-// })
-
 app.listen(PORT, () => {
     console.log("Server listening on port " + PORT);
 })
