@@ -26,7 +26,7 @@ html
 
         title Synteny
     body
-        .container
+        .container#header
             .row
                 .col-sm-3
                     h3 Division&nbsp;
@@ -54,7 +54,7 @@ html
                 .col-sm-1.col-sm-push-11
                     button.btn.btn-primary#btn-done.hidden.w-100
                         i.fa.fa-check.center
-        .container
+        .container-fluid#chart-container
             .row
-                .col-sm-12
-                    svg#chart(width="750" height="750")
+                .col-sm-12.no-gutter
+                    svg#chart

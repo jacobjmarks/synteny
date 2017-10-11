@@ -168,11 +168,15 @@ function drawChart(match_matrix) {
                 data.push({
                     i: i,
                     j: j,
-                    matches: datum,
-                    r: datum / 100
+                    matches: datum
                 })
             }
         }
+    }
+
+    const calcDrawRadius = function(matches) {
+        const maxRadius = 100;
+        return (matches / maxMatches) * maxRadius;
     }
 
     const tooltip = d3.select("body")
@@ -189,14 +193,15 @@ function drawChart(match_matrix) {
         .text("");
 
     let svg = d3.select("#chart"),
-        width = +svg.attr("width"),
-        height = +svg.attr("height");
+        width = $("#chart").width(),
+        height = $("#chart").height(),
+        h_offset = $("#header").height()/2
 
     let color = d3.scaleSequential(d3.interpolateBlues).domain([0, maxMatches]);    
 
     svg.selectAll("circle").data(data).enter()
         .append("circle")
-        .attr("r", (d) => d.r)
+        .attr("r", (d) => calcDrawRadius(d.matches))
         .style("fill", (d) => color(d.matches))
         .on("mouseover", (d) => tooltip.html(`${d.i} | ${d.j}<br>${d.matches}`).style("visibility", "visible"))
         .on("mousemove", () => tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px"))
@@ -205,9 +210,9 @@ function drawChart(match_matrix) {
     d3.forceSimulation(data)
         .force("x", d3.forceX())
         .force("y", d3.forceY())
-        .force("collide", d3.forceCollide().radius((d) => d.r))
+        .force("collide", d3.forceCollide().radius((d) => calcDrawRadius(d.matches) + 5))
         .on("tick", () => {
             svg.selectAll("circle")
-                .attr("transform", (d) => `translate(${[d.x + width/2, d.y + width/2]})`)
+                .attr("transform", (d) => `translate(${[d.x + width/2, d.y + height/2 + h_offset]})`)
         })
 }
