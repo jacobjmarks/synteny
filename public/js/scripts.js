@@ -156,6 +156,7 @@ function compareSequences() {
 function drawChart(match_matrix) {
     console.log(match_matrix);
     $("#chart").empty();
+    $("#matrix-div").empty();
     let data = [];
     // let minMatches = Number.MAX_SAFE_INTEGER;
     let maxMatches = Number.MIN_SAFE_INTEGER;
@@ -170,6 +171,8 @@ function drawChart(match_matrix) {
                     j: j,
                     matches: datum
                 })
+
+                $("#matrix-div").append(`<p>${i} ${j}\t${datum}</p>`)
             }
         }
     }
@@ -194,8 +197,11 @@ function drawChart(match_matrix) {
 
     let svg = d3.select("#chart"),
         width = $("#chart").width(),
-        height = $("#chart").height(),
-        h_offset = $("#header").height()/2
+        height = $("#chart").height()
+        
+    let header_height = $("#header").height();
+
+    d3.select("#matrix-div").attr("transform", `translate(${[0, header_height]})`)
 
     let color = d3.scaleSequential(d3.interpolateBlues).domain([0, maxMatches]);    
 
@@ -213,6 +219,6 @@ function drawChart(match_matrix) {
         .force("collide", d3.forceCollide().radius((d) => calcDrawRadius(d.matches) + 5))
         .on("tick", () => {
             svg.selectAll("circle")
-                .attr("transform", (d) => `translate(${[d.x + width/2, d.y + height/2 + h_offset]})`)
+                .attr("transform", (d) => `translate(${[d.x + width/2, d.y + height/2 + header_height/2]})`)
         })
 }
