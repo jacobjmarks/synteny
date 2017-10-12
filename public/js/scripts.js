@@ -48,11 +48,67 @@ $(document).ready(() => {
 
     seq_container = $("#sequences");
 
+    loading = {
+        divisions: (isLoading) => {
+            if (isLoading) {
+                select.divisions.prop("disabled", true);
+                select.divisions.selectpicker("refresh");
+                spinner.divisions.removeClass("hidden");
+                select.divisions.selectpicker("refresh");
+            } else {
+                select.divisions.prop("disabled", false);
+                select.divisions.selectpicker("refresh");
+                spinner.divisions.addClass("hidden");
+            }
+        },
+        species: (isLoading) => {
+            if (isLoading) {
+                spinner.species.removeClass("hidden");
+                select.species.empty();
+                select.species.prop("disabled", true);
+                select.species.selectpicker("refresh");
+            
+                select.karyotypes.empty();
+                select.karyotypes.prop("disabled", true);
+                select.karyotypes.selectpicker("refresh");
+
+                btn_add.prop("disabled", true);
+            } else {
+                select.species.prop("disabled", false);
+                select.species.selectpicker("refresh");
+                spinner.species.addClass("hidden");
+            }
+        },
+        karyotypes: (isLoading) => {
+            if (isLoading) {
+                spinner.karyotype.removeClass("hidden");
+                select.karyotypes.empty();
+                select.karyotypes.prop("disabled", true);
+                select.karyotypes.selectpicker("refresh");
+
+                btn_add.prop("disabled", true);
+            } else {
+                select.karyotypes.prop("disabled", false);
+                select.karyotypes.selectpicker("refresh");
+                spinner.karyotype.addClass("hidden");
+            }
+        },
+        results: (isLoading) => {
+            if (isLoading) {
+                $("#btn-done-check").addClass("hidden");
+                $("#btn-done-spinner").removeClass("hidden");
+            } else {
+                $("#btn-done-check").removeClass("hidden");
+                $("#btn-done-spinner").addClass("hidden");
+            }
+        }
+    }
+
     populateDivisions();
 })
 
 function populateDivisions() {
-    spinner.divisions.removeClass("hidden");
+    loading.divisions(true);
     $.ajax({
         url: "/getDivisions",
         method: "POST"
@@ -61,24 +117,13 @@ function populateDivisions() {
         select.divisions.append(`<option>Ensembl</option>`)
         for (let i = 0; i < divisions.length; i++) {
             select.divisions.append(`<option value="${divisions[i]}">${divisions[i]}</option>`)
-        }        
-        select.divisions.selectpicker("refresh");
-        spinner.divisions.addClass("hidden");
+        }
+        loading.divisions(false);
     })
 }
 
 function populateSpecies(division) {
-    spinner.species.removeClass("hidden");
-    select.species.empty();
-    select.species.prop("disabled", true);
-    select.species.selectpicker("refresh");
-
-    select.karyotypes.empty();
-    select.karyotypes.prop("disabled", true);
-    select.karyotypes.selectpicker("refresh");
-    
-    btn_add.prop("disabled", true);
-
+    loading.species(true);
     $.ajax({
         url: `/getSpecies/${division}`,
         method: "POST"
@@ -90,21 +135,12 @@ function populateSpecies(division) {
             let s = species[i];
             select.species.append(`<option value="${s.name}" data-subtext="${s.common_name ? s.common_name : ''}">${s.display_name}</option>`)
         }
-
-        select.species.prop("disabled", false);
-        select.species.selectpicker("refresh");
-        spinner.species.addClass("hidden");
+        loading.species(false);
     })
 }
 
 function populateKaryotypes(division, species) {
-    spinner.karyotype.removeClass("hidden");
-    select.karyotypes.empty();
-    select.karyotypes.prop("disabled", true);
-    select.karyotypes.selectpicker("refresh");
-
-    btn_add.prop("disabled", true);
-
+    loading.karyotypes(true);
     $.ajax({
         url: `/getKaryotypes/${division}/${species}`,
         method: "POST"
@@ -114,10 +150,7 @@ function populateKaryotypes(division, species) {
         for (let i = 0; i < karyotypes.length; i++) {
             select.karyotypes.append(`<option value="${karyotypes[i]}">${karyotypes[i]}</option>`)
         }
-
-        select.karyotypes.prop("disabled", false);
-        select.karyotypes.selectpicker("refresh");
-        spinner.karyotype.addClass("hidden");
+        loading.karyotypes(false);
     })
 }
 
@@ -148,18 +181,8 @@ function addToList(selection) {
     updateList();
 }
 
-function isLoading(loading) {
-    if (loading) {
-        $("#btn-done-check").addClass("hidden");
-        $("#btn-done-spinner").removeClass("hidden");
-    } else {
-        $("#btn-done-check").removeClass("hidden");
-        $("#btn-done-spinner").addClass("hidden");
-    }
-}
-
 function compareSequences() {
-    isLoading(true);
+    loading.results(true);
     seq_container.empty();
     $.ajax({
         url: "/compareSequences",
@@ -171,7 +194,7 @@ function compareSequences() {
     })
     .done((match_matrix) => {
         drawChart(match_matrix);
-        isLoading(false);
+        loading.results(false);
     })
 }
 
