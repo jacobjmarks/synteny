@@ -27,6 +27,8 @@
 /* - */
 
 #header-panel-container {
+    position: relative;
+    z-index: 1;
     margin-top: 10px;
 }
 
