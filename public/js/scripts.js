@@ -95,12 +95,30 @@ $(document).ready(() => {
         },
         results: (isLoading) => {
             if (isLoading) {
+                btn_done.prop("disabled", true);
                 $("#btn-done-check").addClass("hidden");
                 $("#btn-done-spinner").removeClass("hidden");
+                $(".list-item button").each((i, btn) => $(btn).prop("disabled", true));
+                btn_add.prop("disabled", true);
+                select.divisions.prop("disabled", true);
+                select.species.prop("disabled", true);
+                select.karyotypes.prop("disabled", true);
+                $("#btn-collapse").prop("disabled", true);
             } else {
+                btn_done.prop("disabled", false);
                 $("#btn-done-check").removeClass("hidden");
                 $("#btn-done-spinner").addClass("hidden");
+                $(".list-item button").each((i, btn) => $(btn).prop("disabled", false));
+                btn_add.prop("disabled", false);
+                select.divisions.prop("disabled", false);
+                select.species.prop("disabled", false);
+                select.karyotypes.prop("disabled", false);
+                $("#btn-collapse").prop("disabled", false);
+                setTimeout(() => $("#btn-collapse").click(), 1000);
             }
+            select.divisions.selectpicker("refresh");
+            select.species.selectpicker("refresh");
+            select.karyotypes.selectpicker("refresh");
         }
     }
 
