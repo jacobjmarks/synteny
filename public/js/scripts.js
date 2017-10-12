@@ -104,6 +104,19 @@ $(document).ready(() => {
         }
     }
 
+    $("#btn-collapse").click(() => {
+        const down = $("#btn-collapse-down");
+        const up = $("#btn-collapse-up");
+
+        if (down.hasClass("hidden")) {
+            down.removeClass("hidden");
+            up.addClass("hidden");
+        } else {
+            down.addClass("hidden");
+            up.removeClass("hidden");
+        }
+    })
+
     populateDivisions();
 })
 
@@ -278,6 +291,6 @@ function drawChart(match_matrix) {
         .force("y", d3.forceY())
         .force("collide", d3.forceCollide().radius((d) => calcDrawRadius(d.matches) + 5))
         .on("tick", () => {
-            nodes.attr("transform", (d) => `translate(${[d.x + width/2, d.y + height/2 + header_height/2]})`)
+            nodes.attr("transform", (d) => `translate(${[d.x + width/2, d.y + height/2]})`)
         })
 }

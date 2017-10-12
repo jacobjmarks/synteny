@@ -26,7 +26,7 @@ html
 
         title Synteny
     body
-        .container#header
+        .container#header.collapse.in
             .row
                 .col-sm-3
                     h3 Division&nbsp;
@@ -55,6 +55,12 @@ html
                     button.btn.btn-primary#btn-done.hidden.w-100
                         i.fa.fa-check.center#btn-done-check
                         i.fa.fa-spinner.fa-spin#btn-done-spinner.hidden
+        .container
+            .row
+                .col-xs-12
+                    button.btn.btn-default#btn-collapse(data-toggle="collapse" data-target="#header")
+                        i.fa.fa-angle-down#btn-collapse-down.hidden
+                        i.fa.fa-angle-up#btn-collapse-up
         .container-fluid
             .row
                 .col-sm-12
