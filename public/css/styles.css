@@ -26,6 +26,22 @@
 
 /* - */
 
+#header-panel-container {
+    margin-top: 10px;
+}
+
+#header-panel {
+    width: 100%;
+    margin: 0 auto;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+#btn-collapse {
+    width: 100%;
+    display: block;
+    margin: 0 auto;
+}
+
 .list-item {
     margin-top: 10px;
 }
@@ -68,9 +84,4 @@ body #header button {
     position: absolute;
     top: 10px;
     right: 10px;
-}
-
-#btn-collapse {
-    display: block;
-    margin: 0 auto;
 }
