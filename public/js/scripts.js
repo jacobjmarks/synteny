@@ -148,7 +148,18 @@ function addToList(selection) {
     updateList();
 }
 
+function isLoading(loading) {
+    if (loading) {
+        $("#btn-done-check").addClass("hidden");
+        $("#btn-done-spinner").removeClass("hidden");
+    } else {
+        $("#btn-done-check").removeClass("hidden");
+        $("#btn-done-spinner").addClass("hidden");
+    }
+}
+
 function compareSequences() {
+    isLoading(true);
     seq_container.empty();
     $.ajax({
         url: "/compareSequences",
@@ -160,6 +171,7 @@ function compareSequences() {
     })
     .done((match_matrix) => {
         drawChart(match_matrix);
+        isLoading(false);
     })
 }
 
