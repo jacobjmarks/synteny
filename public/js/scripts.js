@@ -138,6 +138,8 @@ $(document).ready(() => {
     })
 
     populateDivisions();
+
+    recent_comparisons = [];
     getRecentComparisons();
 })
 
@@ -147,8 +149,40 @@ function getRecentComparisons() {
         method: "POST"
     })
     .done((comparisons) => {
-        console.log(comparisons);
+        recent_comparisons = comparisons;
+        updateRecentComparisons();
     })
+}
+
+function updateRecentComparisons() {
+    for (let i = 0; i < recent_comparisons.length; i++) {
+        let c = recent_comparisons[i];
+
+        let item = $(pugTemplate_recentreq({
+            date: new Date(c.date_posted).toLocaleString()
+        }));
+        $(item).find("button").click(() => {
+            viewRecent(c);
+        });
+
+        $("#recent-container").append(item);
+    }
+}
+
+function viewRecent(comparison) {
+    req_list = [];
+    for (let i = 0; i < comparison.divisions.length; i++) {
+        req_list.push({
+            division: comparison.divisions[i],
+            species: {
+                name: comparison.species[i].name,
+                common_name: comparison.species[i].common_name,
+                display_name: comparison.species[i].display_name
+            },
+            karyotypes: comparison.karyotypes[i],
+        });
+    }
+    updateList();
 }
 
 function populateDivisions() {

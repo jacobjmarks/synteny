@@ -21,6 +21,7 @@
 
 .center {
     position: absolute;
+    left: 50%;
     transform: translate(-50%, -50%);
 }
 
@@ -65,7 +66,11 @@
             #chart circle {
                 pointer-events: all;
             }
-            
+.recent-list-item button {
+    height: 25px;
+    width: 100%;
+}
+
 #matrix-div {
     position: fixed;
     top: 10px;

@@ -21,6 +21,7 @@ html
 
         script(src="/js/scripts.js")
         script(src="/js/templates/listitem.js")
+        script(src="/js/templates/recentreq.js")
 
         link(rel="stylesheet" href="/css/styles.css")
 
@@ -67,8 +68,12 @@ html
             .row
                 .col-sm-12
                     svg#chart(text-anchor="middle")
+        .container-fluid#recent-container
+            .row
+                .col-sm-12
+
         #matrix-div
-        
+
         #bitwise-switch-div
             span Bitwise Compare&nbsp;
             input#bitwise-switch(type="checkbox")
