@@ -43,9 +43,9 @@ app.post("/getKaryotypes/:division/:species", (req, res) => {
 
 app.post("/compareSequences", (req, res) => {
     let req_list = JSON.parse(req.body.req_list);
-    let use_bloom = parseInt(req.body.use_bloom);
+    let use_bitwise = parseInt(req.body.use_bitwise);
     console.log("POST /compareSequences", req_list);
-    sequences.pullAndCompareAll(req_list, use_bloom, (results) => {
+    sequences.pullAndCompareAll(req_list, use_bitwise, (results) => {
         res.send(results);
     });
 })

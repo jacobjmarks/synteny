@@ -220,7 +220,7 @@ function compareSequences() {
         method: "POST",
         data: {
             req_list: JSON.stringify(req_list),
-            use_bloom: ($("#bloom-switch").prop("checked")) ? 1 : 0
+            use_bitwise: ($("#bitwise-switch").prop("checked")) ? 1 : 0
         }
     })
     .done((match_matrix) => {
