@@ -20,6 +20,18 @@ const comparisonSchema = mongoose.Schema({
     karyotypes: {type: [[String]], required: true}
 });
 
+comparisonSchema.pre("save", (next) => {
+    Comparison.count({}, (err, count) => {
+        if (err) console.error.bind(console, 'count error:');
+        if (count + 1 > 10) {
+            Comparison.findOneAndRemove().sort({ date_posted: 1}).exec((err, _) => {
+                if (err) console.error.bind(console, 'deletion error:');
+                next();
+            });
+        }
+    })
+})
+
 const Comparison = mongoose.model('Comparison', comparisonSchema);
 
 module.exports.comparisons = (callback) => {
@@ -29,7 +41,6 @@ module.exports.comparisons = (callback) => {
 }
 
 module.exports.addComparison = (comparison, callback) => {
-    console.log(comparison);
     new Comparison(comparison).save((err, _) => {
         callback(err);
     });
