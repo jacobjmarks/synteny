@@ -1,13 +1,13 @@
 .row.list-item
-    .col-sm-1
+    .col-xs-1
         h4 #{index}
-    .col-sm-2
+    .col-xs-2
         h5 #{item.division}
-    .col-sm-5
-        h5 #{item.species.display_name}&nbsp;
+    .col-xs-6
+        h5.species #{item.species.display_name}&nbsp;
             small.text-muted #{item.species.common_name}
-    .col-sm-3
+    .col-xs-1.col-sm-2
         h5 #{item.karyotypes}
-    .col-sm-1
+    .col-xs-2.col-sm-1
         button.btn.btn-danger.w-100
             i.fa.fa-times.center

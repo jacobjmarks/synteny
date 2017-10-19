@@ -124,14 +124,37 @@ $(document).ready(() => {
         }
     }
 
-    $("#btn-collapse").click(() => {
-        const down = $("#btn-collapse-down");
-        const up = $("#btn-collapse-up");
+    const btn_collapse = $("#btn-collapse");
+
+    btn_collapse.click(() => {
+        const text = btn_collapse.find("text");
+        const down = btn_collapse.find(".fa-angle-down");
+        const up = btn_collapse.find(".fa-angle-up");
 
         if (down.hasClass("hidden")) {
+            text.removeClass("hidden");
             down.removeClass("hidden");
             up.addClass("hidden");
         } else {
+            text.addClass("hidden");
+            down.addClass("hidden");
+            up.removeClass("hidden");
+        }
+    })
+
+    const btn_collapse_recent = $("#btn-collapse-recent");
+
+    btn_collapse_recent.click(() => {
+        const text = btn_collapse_recent.find("text");
+        const down = btn_collapse_recent.find(".fa-angle-down");
+        const up = btn_collapse_recent.find(".fa-angle-up");
+
+        if (down.hasClass("hidden")) {
+            text.removeClass("hidden");
+            down.removeClass("hidden");
+            up.addClass("hidden");
+        } else {
+            text.addClass("hidden");
             down.addClass("hidden");
             up.removeClass("hidden");
         }
@@ -159,13 +182,20 @@ function updateRecentComparisons() {
         let c = recent_comparisons[i];
 
         let item = $(pugTemplate_recentreq({
-            date: new Date(c.date_posted).toLocaleString()
+            date: new Date(c.date_posted).toLocaleString(),
+            count: c.divisions.length,
+            species: c.species.reduce((a, b) => {
+                if (a.indexOf(b.display_name) === -1) {
+                    a.push(b.display_name);
+                }
+                return a;
+            }, []).join(", ")
         }));
         $(item).find("button").click(() => {
             viewRecent(c);
         });
 
-        $("#recent-container").append(item);
+        $("#recent-list").append(item);
     }
 }
 

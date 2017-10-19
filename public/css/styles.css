@@ -21,16 +21,19 @@
 
 .center {
     position: absolute;
-    left: 50%;
     transform: translate(-50%, -50%);
 }
 
 /* - */
 
+body {
+    min-width: 500px;
+}
+
 #header-panel-container {
     position: relative;
     z-index: 1;
-    margin-top: 10px;
+    margin: 10px auto;
 }
     #header-panel {
         width: 100%;
@@ -43,6 +46,11 @@
         .list-item {
             margin-top: 10px;
         }
+            .list-item .species {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
         #btn-done {
             margin-top: 10px;
         }
@@ -66,14 +74,31 @@
             #chart circle {
                 pointer-events: all;
             }
-.recent-list-item button {
-    height: 25px;
-    width: 100%;
+
+.recent-container {
+    min-width: 50% !important;
 }
+    .recent-list-item .recent-date {
+        white-space: nowrap;
+    }
+    .recent-list-item .recent-species {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .recent-list-item button {
+        height: 25px;
+        width: 100%;float:right;
+    }
+    #btn-collapse-recent {
+        width: 100%;
+        display: block;
+        margin: 0 auto;
+    }
 
 #matrix-div {
     position: fixed;
-    top: 10px;
+    bottom: 10px;
     left: 10px;
     font-family: monospace;
 }

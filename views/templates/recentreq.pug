@@ -1,8 +1,8 @@
 .row.recent-list-item
-    .col-sm-11
-        p #{date}
-    .col-sm-1
+    .col-xs-3
+        small.recent-date #{date}
+    .col-xs-7
+        p.recent-species (#{count} Seqs) #{species}
+    .col-xs-2
         button.btn.btn-primary
-            .center
-                i.fa.fa-eye
-                | &nbsp;View
+            i.fa.fa-eye.center

@@ -37,21 +37,17 @@ html
                                     .col-sm-3
                                         h3 Division&nbsp;
                                             i.fa.fa-spinner.fa-spin#spinner-divisions.hidden
-                                    .col-sm-5
+                                        select.selectpicker#select-divisions(title="Select a Division..." data-width="100%")
+                                    .col-sm-6
                                         h3 Species&nbsp;
                                             i.fa.fa-spinner.fa-spin#spinner-species.hidden
-                                    .col-sm-3
+                                        select.selectpicker#select-species(title="Select a Species..." data-live-search="true" data-width="100%" disabled)
+                                    .col-sm-2
                                         h3 Karyotype&nbsp;
                                             i.fa.fa-spinner.fa-spin#spinner-karyotype.hidden
-                                    .col-sm-1
-                                .row
-                                    .col-sm-3
-                                        select.selectpicker#select-divisions(title="Select a Division..." data-width="100%")
-                                    .col-sm-5
-                                        select.selectpicker#select-species(title="Select a Species..." data-live-search="true" data-width="100%" disabled)
-                                    .col-sm-3
                                         select.selectpicker#select-karyotypes(title="Select a Karyotype..." multiple data-width="100%" disabled)
                                     .col-sm-1
+                                        h3.hidden-xs &nbsp;
                                         button.btn.btn-success#btn-add.w-100(disabled)
                                             i.fa.fa-plus.center
                                 .row
@@ -62,15 +58,27 @@ html
                                             i.fa.fa-check.center#btn-done-check
                                             i.fa.fa-spinner.fa-spin#btn-done-spinner.hidden
                             button.btn.btn-link#btn-collapse(data-toggle="collapse" data-target="#header")
-                                i.fa.fa-angle-down#btn-collapse-down.hidden
-                                i.fa.fa-angle-up#btn-collapse-up
+                                text.hidden New Comparison &nbsp;
+                                i.fa.fa-angle-down.hidden
+                                i.fa.fa-angle-up
         .container-fluid#chart-container
             .row
                 .col-sm-12
                     svg#chart(text-anchor="middle")
-        .container-fluid#recent-container
+        .container#recent-container.no-gutter
             .row
-                .col-sm-12
+                .col-xs-12
+                    .panel.panel-default
+                        .panel-text
+                            .container-fluid#recent.collapse
+                                .row
+                                    .col-xs-12
+                                        h3 Recent
+                                        #recent-list
+                            button.btn.btn-link#btn-collapse-recent(data-toggle="collapse" data-target="#recent")
+                                text Recent &nbsp;
+                                i.fa.fa-angle-down
+                                i.fa.fa-angle-up.hidden
 
         #matrix-div
 
