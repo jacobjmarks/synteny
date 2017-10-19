@@ -106,6 +106,8 @@ $(document).ready(() => {
                 select.species.prop("disabled", true);
                 select.karyotypes.prop("disabled", true);
                 $("#btn-collapse").prop("disabled", true);
+                ($("#recent").hasClass("in")) ? $("#btn-collapse-recent").click() : ()=>{};
+                $("#btn-collapse-recent").prop("disabled", true);
             } else {
                 btn_done.prop("disabled", false);
                 $("#btn-done-check").removeClass("hidden");
@@ -116,7 +118,8 @@ $(document).ready(() => {
                 select.species.prop("disabled", false);
                 select.karyotypes.prop("disabled", false);
                 $("#btn-collapse").prop("disabled", false);
-                setTimeout(() => $("#btn-collapse").click(), 1000);
+                $("#btn-collapse-recent").prop("disabled", false);
+                $("#btn-collapse").click();
             }
             select.divisions.selectpicker("refresh");
             select.species.selectpicker("refresh");
@@ -200,6 +203,7 @@ function updateRecentComparisons() {
 }
 
 function viewRecent(comparison) {
+    ($("#header").hasClass("in")) ? ()=>{} :$("#btn-collapse").click();
     req_list = [];
     for (let i = 0; i < comparison.divisions.length; i++) {
         req_list.push({

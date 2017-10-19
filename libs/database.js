@@ -22,12 +22,15 @@ const comparisonSchema = mongoose.Schema({
 
 comparisonSchema.pre("save", (next) => {
     Comparison.count({}, (err, count) => {
+        console.log(count);
         if (err) console.error.bind(console, 'count error:');
         if (count + 1 > 10) {
             Comparison.findOneAndRemove().sort({ date_posted: 1}).exec((err, _) => {
                 if (err) console.error.bind(console, 'deletion error:');
                 next();
             });
+        } else {
+            next();
         }
     })
 })

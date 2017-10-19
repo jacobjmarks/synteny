@@ -36,10 +36,12 @@ body {
     margin: 10px auto;
 }
     #header-panel {
-        width: 100%;
         margin: 0 auto;
         background-color: rgba(255, 255, 255, 0.9);
     }
+        #karyotype-header-div {
+            white-space: nowrap;
+        }
         #header button {
             height: 34px;
         }
@@ -55,6 +57,7 @@ body {
             margin-top: 10px;
         }
         #btn-collapse {
+            text-decoration: none;
             width: 100%;
             display: block;
             margin: 0 auto;
@@ -75,8 +78,8 @@ body {
                 pointer-events: all;
             }
 
-.recent-container {
-    min-width: 50% !important;
+#recent-panel {
+    background-color: rgba(255, 255, 255, 0.9);
 }
     .recent-list-item .recent-date {
         white-space: nowrap;
@@ -91,6 +94,7 @@ body {
         width: 100%;float:right;
     }
     #btn-collapse-recent {
+        text-decoration: none !important;
         width: 100%;
         display: block;
         margin: 0 auto;
