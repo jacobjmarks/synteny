@@ -10,7 +10,13 @@ db.once('open', () => {
 const comparisonSchema = mongoose.Schema({
     date_posted: {type: Date, required: true, default: Date.now},
     divisions: {type: [String], required: true},
-    species: {type: [{name: String, common_name: String, display_name: String}], required: true},
+    species: {
+        type: [{
+            name: {type: String, required: true},
+            common_name: {type: String, required: true},
+            display_name: {type: String, required: true}
+        }],
+        required: true},
     karyotypes: {type: [[String]], required: true}
 });
 
