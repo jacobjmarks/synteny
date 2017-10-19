@@ -4,8 +4,8 @@
     .col-sm-2
         h5 #{item.division}
     .col-sm-5
-        h5 #{item.display_name}&nbsp;
-            small.text-muted= item.common_name
+        h5 #{item.species.display_name}&nbsp;
+            small.text-muted #{item.species.common_name}
     .col-sm-3
         h5 #{item.karyotypes}
     .col-sm-1

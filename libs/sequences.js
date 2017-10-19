@@ -26,7 +26,7 @@ function pull(req_list, callback) {
                 callback(seqs);
             }
         };
-        (req.division === "Ensembl") ? ensembl.sequence_region(req.species, req.karyotypes, cb) : ensemblGenomes.sequence_region(req.species, req.karyotypes, cb);
+        (req.division === "Ensembl") ? ensembl.sequence_region(req.species.name, req.karyotypes, cb) : ensemblGenomes.sequence_region(req.species.name, req.karyotypes, cb);
     }
 }
 

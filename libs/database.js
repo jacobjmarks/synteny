@@ -30,11 +30,7 @@ module.exports.comparisons = (callback) => {
 
 module.exports.addComparison = (comparison, callback) => {
     console.log(comparison);
-    new Comparison({
-        divisions: comparison.divisions,
-        species: comparison.species,
-        karyotypes: comparison.karyotypes
-    }).save((err, _) => {
+    new Comparison(comparison).save((err, _) => {
         callback(err);
     });
 }

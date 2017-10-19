@@ -49,12 +49,7 @@ app.post("/compareSequences", (req, res) => {
 
     database.addComparison({
         divisions: req_list.map((req) => req.division),
-        species: req_list.map((req) => {
-            return {
-                name: req.species,
-                common_name: req.common_name,
-                display_name: req.display_name}
-        }),
+        species: req_list.map((req) => req.species),
         karyotypes: req_list.map((req) => req.karyotypes)
     }, (err) => {
         if (err) {
@@ -77,15 +72,15 @@ app.post("/getComparisons", (req, res) => {
     })
 })
 
-app.post("/addComparison", (req, res) => {
-    database.addComparison(req.body.comparison, (err) => {
-        if (err) {
-            console.error(err.stack);
-            return res.status(500).end();
-        }
-        res.end();
-    })
-})
+// app.post("/addComparison", (req, res) => {
+//     database.addComparison(req.body.comparison, (err) => {
+//         if (err) {
+//             console.error(err.stack);
+//             return res.status(500).end();
+//         }
+//         res.end();
+//     })
+// })
 
 app.listen(PORT, () => {
     console.log("Server listening on port " + PORT);

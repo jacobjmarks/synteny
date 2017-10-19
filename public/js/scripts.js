@@ -33,10 +33,12 @@ $(document).ready(() => {
         let selected_specie = $("#select-species option:checked");
         addToList({
             division: select.divisions.val(),
-            species: select.species.val(),
+            species: {
+                name: select.species.val(),
+                common_name: selected_specie.attr("data-subtext"),
+                display_name: selected_specie.html()
+            },
             karyotypes: select.karyotypes.val(),
-            common_name: selected_specie.attr("data-subtext"),
-            display_name: selected_specie.html()
         });
         select.karyotypes.selectpicker("deselectAll");
     })
@@ -255,10 +257,10 @@ function drawChart(match_matrix) {
                 // if (datum < minMatches) {minMatches = datum}
                 data.push({
                     a_alpha_index: alphabet[i],
-                    a_name: req_list[i].display_name,
+                    a_name: req_list[i].species.display_name,
                     a_karyotypes: req_list[i].karyotypes,
                     b_alpha_index: alphabet[j],
-                    b_name: req_list[j].display_name,
+                    b_name: req_list[j].species.display_name,
                     b_karyotypes: req_list[j].karyotypes,
                     matches: datum
                 })
