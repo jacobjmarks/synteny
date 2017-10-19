@@ -31,54 +31,45 @@
     z-index: 1;
     margin-top: 10px;
 }
-
-#header-panel {
-    width: 100%;
-    margin: 0 auto;
-    background-color: rgba(255, 255, 255, 0.9);
-}
-
-#btn-collapse {
-    width: 100%;
-    display: block;
-    margin: 0 auto;
-}
-
-.list-item {
-    margin-top: 10px;
-}
-
-#btn-done {
-    margin-top: 10px;
-}
-
-body #header button {
-    height: 34px;
-}
-
-#sequences {
-    font-family: monospace;
-}
-
-#chart-container {
-    pointer-events: none;
-    position: absolute;
-    top: 0px;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-}
-
-#chart {
-    width: 100%;
-    height: 100%;
-}
-
-#chart circle {
-    pointer-events: all;
-}
-
+    #header-panel {
+        width: 100%;
+        margin: 0 auto;
+        background-color: rgba(255, 255, 255, 0.9);
+    }
+        #header button {
+            height: 34px;
+        }
+        .list-item {
+            margin-top: 10px;
+        }
+        #btn-done {
+            margin-top: 10px;
+        }
+        #btn-collapse {
+            width: 100%;
+            display: block;
+            margin: 0 auto;
+        }
+    #chart-container {
+        pointer-events: none;
+        position: absolute;
+        top: 0px;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+    }
+        #chart {
+            width: 100%;
+            height: 100%;
+        }
+            #chart circle {
+                pointer-events: all;
+            }
+            
 #matrix-div {
+    position: fixed;
+    top: 10px;
+    left: 10px;
     font-family: monospace;
 }
 
