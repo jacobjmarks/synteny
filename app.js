@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 const ensembl = require("./libs/ensembl.js");
 const ensemblGenomes = require("./libs/ensemblGenomes.js");
 const sequences = require("./libs/sequences.js");
+const database = require("./libs/database.js");
 
 const PORT = 3000;
 
@@ -45,9 +46,45 @@ app.post("/compareSequences", (req, res) => {
     let req_list = JSON.parse(req.body.req_list);
     let use_bitwise = parseInt(req.body.use_bitwise);
     console.log("POST /compareSequences", req_list);
+
+    database.addComparison({
+        divisions: req_list.map((req) => req.division),
+        species: req_list.map((req) => {
+            return {
+                name: req.species,
+                common_name: req.common_name,
+                display_name: req.display_name}
+        }),
+        karyotypes: req_list.map((req) => req.karyotypes)
+    }, (err) => {
+        if (err) {
+            console.error(err.stack);
+        }
+    })
+
     sequences.pullAndCompareAll(req_list, use_bitwise, (results) => {
         res.send(results);
     });
+})
+
+app.post("/getComparisons", (req, res) => {
+    database.comparisons((err, comparisons) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).end();
+        }
+        res.send(comparisons);
+    })
+})
+
+app.post("/addComparison", (req, res) => {
+    database.addComparison(req.body.comparison, (err) => {
+        if (err) {
+            console.error(err.stack);
+            return res.status(500).end();
+        }
+        res.end();
+    })
 })
 
 app.listen(PORT, () => {

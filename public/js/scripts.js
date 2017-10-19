@@ -136,7 +136,18 @@ $(document).ready(() => {
     })
 
     populateDivisions();
+    getRecentComparisons();
 })
+
+function getRecentComparisons() {
+    $.ajax({
+        url: "/getComparisons",
+        method: "POST"
+    })
+    .done((comparisons) => {
+        console.log(comparisons);
+    })
+}
 
 function populateDivisions() {
     loading.divisions(true);
