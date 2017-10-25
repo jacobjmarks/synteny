@@ -25,7 +25,7 @@ module.exports.info_assembly = function(species, callback) {
 }
 
 module.exports.sequence_region = function(species, karyotypes, callback) {
-    const seq_length = 1000;
+    const seq_length = 10000;
     request({
         url: `http://rest.ensembl.org/sequence/region/${species}`,
         method: "POST",
