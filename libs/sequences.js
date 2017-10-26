@@ -25,7 +25,13 @@ function pull(req_list, callback) {
     let error = false;
     for (let i = 0; i < req_list.length; i++) {
         let req = req_list[i];
-        let cb = (results) => {
+        let cb = (err, results) => {
+            if (err) {
+                if (!error) {
+                    error = true;
+                    return callback(err);
+                }
+            }
             try {
                 seqs[i] += results.map((result) => result.seq).reduce((a, b) => a.concat(b));
             } catch (e) {

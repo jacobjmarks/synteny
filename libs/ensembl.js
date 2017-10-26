@@ -8,7 +8,11 @@ module.exports.info_species = function(callback) {
             "Content-Type": "application/json"
         }
     }, (error, response, body) => {
-        callback(JSON.parse(body).species);
+        if (!error && response.statusCode == 200) {
+            callback(null, JSON.parse(body).species);
+        } else {
+            callback(new Error("Error retrieving species."));
+        }
     })
 }
 
@@ -20,7 +24,11 @@ module.exports.info_assembly = function(species, callback) {
             "Content-Type": "application/json"
         }
     }, (error, response, body) => {
-        callback(JSON.parse(body).karyotype);
+        if (!error && response.statusCode == 200) {
+            callback(null, JSON.parse(body).karyotype);
+        } else {
+            callback(new Error("Error retrieving karyotypes."));
+        }
     })
 }
 
@@ -42,6 +50,10 @@ module.exports.sequence_region = function(species, karyotypes, callback) {
             })()
         }
     }, (error, response, body) => {
-        callback(body);
+        if (!error && response.statusCode == 200) {
+            callback(null, body);
+        } else {
+            callback(new Error("Error retrieving sequence."));
+        }
     })
 }

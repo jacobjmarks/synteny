@@ -63,7 +63,7 @@ $(document).ready(() => {
                 spinner.divisions.addClass("hidden");
             }
         },
-        species: (isLoading) => {
+        species: (isLoading, keepDisabled) => {
             if (isLoading) {
                 spinner.species.removeClass("hidden");
                 select.species.empty();
@@ -76,12 +76,12 @@ $(document).ready(() => {
 
                 btn_add.prop("disabled", true);
             } else {
-                select.species.prop("disabled", false);
+                if (!keepDisabled) select.species.prop("disabled", false);
                 select.species.selectpicker("refresh");
                 spinner.species.addClass("hidden");
             }
         },
-        karyotypes: (isLoading) => {
+        karyotypes: (isLoading, keepDisabled) => {
             if (isLoading) {
                 spinner.karyotype.removeClass("hidden");
                 select.karyotypes.empty();
@@ -90,7 +90,7 @@ $(document).ready(() => {
 
                 btn_add.prop("disabled", true);
             } else {
-                select.karyotypes.prop("disabled", false);
+                if (!keepDisabled) select.karyotypes.prop("disabled", false);
                 select.karyotypes.selectpicker("refresh");
                 spinner.karyotype.addClass("hidden");
             }
@@ -230,6 +230,11 @@ function populateDivisions() {
         for (let i = 0; i < divisions.length; i++) {
             select.divisions.append(`<option value="${divisions[i]}">${divisions[i]}</option>`)
         }
+    })
+    .fail(() => {
+        alert("Error loading Divisions. Please try again.");
+    })
+    .always(() => {
         loading.divisions(false);
     })
 }
@@ -249,6 +254,11 @@ function populateSpecies(division) {
         }
         loading.species(false);
     })
+    .fail(() => {
+        alert("Error loading Species. Please try again.");
+        select.divisions.selectpicker('val', null);
+        loading.species(false, true);
+    })
 }
 
 function populateKaryotypes(division, species) {
@@ -263,6 +273,11 @@ function populateKaryotypes(division, species) {
             select.karyotypes.append(`<option value="${karyotypes[i]}">${karyotypes[i]}</option>`)
         }
         loading.karyotypes(false);
+    })
+    .fail(() => {
+        alert("Error loading Karyotypes. Please try again.");
+        select.species.selectpicker('val', null);
+        loading.karyotypes(false, true);
     })
 }
 

@@ -22,7 +22,11 @@ app.get('/', (req, res) => {
 
 app.post("/getDivisions", (req, res) => {
     console.log("POST /getDivisions");
-    ensemblGenomes.info_divisions((divisions) => {
+    ensemblGenomes.info_divisions((err, divisions) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).end();
+        }
         res.send(divisions);
     })
 })
@@ -30,7 +34,13 @@ app.post("/getDivisions", (req, res) => {
 app.post("/getSpecies/:division", (req, res) => {
     let division = req.params.division;
     console.log(`POST /getSpecies/${division}`)
-    let cb = (species) => {res.send(species)};
+    let cb = (err, species) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).end();
+        }
+        res.send(species);
+    };
     (division === "Ensembl") ? ensembl.info_species(cb) : ensemblGenomes.info_species(division, cb);
 })
 
@@ -38,7 +48,13 @@ app.post("/getKaryotypes/:division/:species", (req, res) => {
     let division = req.params.division;
     let species = req.params.species;
     console.log(`POST /getKaryotypes/${species}`);
-    let cb = (karyotypes) => {res.send(karyotypes)};
+    let cb = (err, karyotypes) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).end();
+        }
+        res.send(karyotypes);
+    };
     (division === "Ensembl") ? ensembl.info_assembly(species, cb) : ensemblGenomes.info_assembly(species, cb);
 })
 
