@@ -3,13 +3,14 @@ const optional = require('optional');
 // mongoose.connect('mongodb://localhost:27017/syntenyDB');
 
 const conf = optional('./mongodb.json');
-conf && mongoose.connect(`mongodb://${conf.user}:${conf.pass}@syntenycluster-shard-00-00-viwso.mongodb.net:27017,syntenycluster-shard-00-01-viwso.mongodb.net:27017,syntenycluster-shard-00-02-viwso.mongodb.net:27017/test?ssl=true&replicaSet=syntenyCluster-shard-0&authSource=admin`);
+const connectionString = conf && `mongodb://${conf.user}:${conf.pass}@syntenycluster-shard-00-00-viwso.mongodb.net:27017,syntenycluster-shard-00-01-viwso.mongodb.net:27017,syntenycluster-shard-00-02-viwso.mongodb.net:27017/test?ssl=true&replicaSet=syntenyCluster-shard-0&authSource=admin`;
 
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', () => {
+mongoose.connect(connectionString, (err) => {
+    if (err) return console.log(err);
     console.log("Database connected.");
 });
+
+const db = mongoose.connection;
 
 const comparisonSchema = mongoose.Schema({
     date_posted: {type: Date, required: true, default: Date.now},
@@ -26,7 +27,6 @@ const comparisonSchema = mongoose.Schema({
 
 comparisonSchema.pre("save", (next) => {
     Comparison.count({}, (err, count) => {
-        console.log(count);
         if (err) console.error.bind(console, 'count error:');
         if (count + 1 > 10) {
             Comparison.findOneAndRemove().sort({ date_posted: 1}).exec((err, _) => {
@@ -42,24 +42,30 @@ comparisonSchema.pre("save", (next) => {
 const Comparison = mongoose.model('Comparison', comparisonSchema);
 
 module.exports.comparisons = (callback) => {
+    if (db.readyState === 0) {
+        return callback(new Error("Cannot connect to database."));
+    }
+    
     Comparison.find((err, comparisons) => {
         callback(err, comparisons);
     }).sort({ date_posted: -1 });
 }
 
 module.exports.addComparison = (comparison, callback) => {
+    if (db.readyState === 0) {
+        return callback(new Error("Cannot connect to database."));
+    }
+
     new Comparison(comparison).save((err, _) => {
         callback(err);
     });
 }
 
-// module.exports.deletePost = (post_id, callback) => {
-//     Post.findByIdAndRemove(post_id, (err, _) => {
-//         callback(err);
-//     });
-// }
-
 module.exports.truncateComparisons = (callback) => {
+    if (db.readyState === 0) {
+        return callback(new Error("Cannot connect to database."));
+    }
+
     Comparison.remove({}, (err) => {
         callback(err);
     });

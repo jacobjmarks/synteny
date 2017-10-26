@@ -178,6 +178,9 @@ function getRecentComparisons() {
         recent_comparisons = comparisons;
         updateRecentComparisons();
     })
+    .fail(() => {
+        window.alert("Error loading recent comparisons.");
+    })
 }
 
 function updateRecentComparisons() {
