@@ -101,10 +101,10 @@ $(document).ready(() => {
                 $("#btn-done-check").addClass("hidden");
                 $("#btn-done-spinner").removeClass("hidden");
                 $(".list-item button").each((i, btn) => $(btn).prop("disabled", true));
-                btn_add.prop("disabled", true);
                 select.divisions.prop("disabled", true);
                 select.species.prop("disabled", true);
                 select.karyotypes.prop("disabled", true);
+                btn_add.prop("disabled", true);
                 $("#btn-collapse").prop("disabled", true);
                 ($("#recent").hasClass("in")) ? $("#btn-collapse-recent").click() : ()=>{};
                 $("#btn-collapse-recent").prop("disabled", true);
@@ -113,10 +113,10 @@ $(document).ready(() => {
                 $("#btn-done-check").removeClass("hidden");
                 $("#btn-done-spinner").addClass("hidden");
                 $(".list-item button").each((i, btn) => $(btn).prop("disabled", false));
-                btn_add.prop("disabled", false);
                 select.divisions.prop("disabled", false);
-                select.species.prop("disabled", false);
-                select.karyotypes.prop("disabled", false);
+                if (select.divisions.val()) select.species.prop("disabled", false);
+                if (select.species.val()) select.karyotypes.prop("disabled", false);
+                if (select.karyotypes.val()[0]) btn_add.prop("disabled", false);
                 $("#btn-collapse").prop("disabled", false);
                 $("#btn-collapse-recent").prop("disabled", false);
                 if (!keepOpen) $("#btn-collapse").click();
