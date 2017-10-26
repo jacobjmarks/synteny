@@ -73,11 +73,13 @@ app.post("/compareSequences", (req, res) => {
         }
     })
 
+    console.log("Comparing...");
     sequences.pullAndCompareAll(req_list, use_bitwise, (err, results) => {
         if (err) {
             console.error(err);
             return res.status(500).end();
         }
+        console.log("Done!");
         res.send(results);
     });
 })

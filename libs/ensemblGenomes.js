@@ -52,7 +52,7 @@ module.exports.info_assembly = function(species, callback) {
 }
 
 module.exports.sequence_region = function(species, karyotypes, callback) {
-    const seq_length = 10000;
+    const seq_length = 3000;
     request({
         url: `http://rest.ensemblgenomes.org/sequence/region/${species}`,
         method: "POST",

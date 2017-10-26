@@ -15,13 +15,13 @@ const db = mongoose.connection;
 const comparisonSchema = mongoose.Schema({
     date_posted: {type: Date, required: true, default: Date.now},
     divisions: {type: [String], required: true},
-    species: {
-        type: [{
+    species: [
+        mongoose.Schema({
             name: {type: String, required: true},
             common_name: {type: String, required: true},
             display_name: {type: String, required: true}
-        }],
-        required: true},
+        }, { _id: false })
+    ],
     karyotypes: {type: [[String]], required: true}
 });
 
@@ -55,10 +55,17 @@ module.exports.addComparison = (comparison, callback) => {
     if (db.readyState === 0) {
         return callback(new Error("Cannot connect to database."));
     }
-
-    new Comparison(comparison).save((err, _) => {
-        callback(err);
-    });
+    
+    Comparison.remove({
+        divisions: comparison.divisions,
+        species: comparison.species,
+        karyotypes: comparison.karyotypes
+    }, (err) => {
+        if (err) console.error(err);
+        new Comparison(comparison).save((err, _) => {
+            callback(err);
+        });
+    })
 }
 
 module.exports.truncateComparisons = (callback) => {
