@@ -184,6 +184,7 @@ function getRecentComparisons() {
 }
 
 function updateRecentComparisons() {
+    $("#recent-list").empty();
     for (let i = 0; i < recent_comparisons.length; i++) {
         let c = recent_comparisons[i];
 
@@ -325,6 +326,7 @@ function compareSequences() {
     .done((match_matrix) => {
         drawChart(match_matrix);
         loading.results(false);
+        getRecentComparisons();
     })
     .fail((a) => {
         window.alert("An unknown error occurred.");
