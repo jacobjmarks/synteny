@@ -95,7 +95,7 @@ $(document).ready(() => {
                 spinner.karyotype.addClass("hidden");
             }
         },
-        results: (isLoading) => {
+        results: (isLoading, keepOpen) => {
             if (isLoading) {
                 btn_done.prop("disabled", true);
                 $("#btn-done-check").addClass("hidden");
@@ -119,7 +119,7 @@ $(document).ready(() => {
                 select.karyotypes.prop("disabled", false);
                 $("#btn-collapse").prop("disabled", false);
                 $("#btn-collapse-recent").prop("disabled", false);
-                $("#btn-collapse").click();
+                if (!keepOpen) $("#btn-collapse").click();
             }
             select.divisions.selectpicker("refresh");
             select.species.selectpicker("refresh");
@@ -307,6 +307,10 @@ function compareSequences() {
     .done((match_matrix) => {
         drawChart(match_matrix);
         loading.results(false);
+    })
+    .fail((a) => {
+        window.alert("An unknown error occurred.");
+        loading.results(false, true);
     })
 }
 
