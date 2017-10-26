@@ -1,5 +1,9 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/syntenyDB');
+const optional = require('optional');
+// mongoose.connect('mongodb://localhost:27017/syntenyDB');
+
+const conf = optional('./mongodb.json');
+conf && mongoose.connect(`mongodb://${conf.user}:${conf.pass}@syntenycluster-shard-00-00-viwso.mongodb.net:27017,syntenycluster-shard-00-01-viwso.mongodb.net:27017,syntenycluster-shard-00-02-viwso.mongodb.net:27017/test?ssl=true&replicaSet=syntenyCluster-shard-0&authSource=admin`);
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
