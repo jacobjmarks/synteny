@@ -16,6 +16,7 @@
     "optional": "^0.1.4",
     "optional-require": "^1.0.0",
     "pug": "^2.0.0-rc.4",
-    "request": "^2.83.0"
+    "request": "^2.83.0",
+    "webworker-threads": "^0.7.13"
   }
 }

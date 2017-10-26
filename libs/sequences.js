@@ -6,17 +6,24 @@ module.exports.pullAndCompareAll = function(req_list, use_bitwise, callback) {
         if (err) {
             return callback(err);
         }
+        
+        let count = 0;
+        let toCompare = (sequences.length * (sequences.length - 1)) / 2;
         let match_matrix = [];
         for (let i = 0; i < sequences.length - 1; i++) {
             match_matrix.push(new Array(sequences.length).fill(null));
             for (let j = i + 1; j < sequences.length; j++) {
-                match_matrix[i][j] = (use_bitwise) ?
-                    compareBitwise(sequences[i], sequences[j])
-                    : compare(sequences[i], sequences[j]);
-                console.log(`${i} ${j}\t${match_matrix[i][j]}`);
+                compare(sequences[i], sequences[j], (result) => {
+                    match_matrix[i][j] = result;
+                    console.log(`${i} ${j}\t${match_matrix[i][j]}`);
+
+                    count++;
+                    if (count === toCompare) {
+                        callback(null, match_matrix);
+                    }
+                })
             }
         }
-        callback(null, match_matrix);
     })
 }
 
@@ -51,22 +58,38 @@ function pull(req_list, callback) {
     }
 }
 
-function compare(seqA, seqB) {
-    const min_kmer_length = 4;
-    let common_kmers = 0;
-    for (let kmer_len = seqA.length; kmer_len >= min_kmer_length; kmer_len--) {
-        for (let i = 0; i <= seqA.length - kmer_len; i++) {
-            let kmer = seqA.substr(i, kmer_len);
-            if (kmer.indexOf('N') !== -1) { break }
-            let searchIndex = 0;
-            while (seqB.indexOf(kmer, searchIndex) !== -1) {
-                let index = seqB.indexOf(kmer, searchIndex);
-                common_kmers++;
-                searchIndex = index + 1;
+const Worker = require('webworker-threads').Worker;
+
+function compare(seqA, seqB, callback) {
+    let workerboi = new Worker(function() {
+        function work (seqs) {
+            let seqA = seqs.seqA;
+            let seqB = seqs.seqB;
+            const min_kmer_length = 4;
+            let common_kmers = 0;
+            for (let kmer_len = seqA.length; kmer_len >= min_kmer_length; kmer_len--) {
+                for (let i = 0; i <= seqA.length - kmer_len; i++) {
+                    let kmer = seqA.substr(i, kmer_len);
+                    if (kmer.indexOf('N') !== -1) { break }
+                    let searchIndex = 0;
+                    while (seqB.indexOf(kmer, searchIndex) !== -1) {
+                        let index = seqB.indexOf(kmer, searchIndex);
+                        common_kmers++;
+                        searchIndex = index + 1;
+                    }
+                }
             }
+            return common_kmers;
         }
-    }
-    return common_kmers;
+        this.onmessage = function (event) {
+            postMessage(work(event.data));
+        }
+      });
+      workerboi.onmessage = function (event) {
+          callback(event.data);
+          workerboi.terminate();
+      };
+      workerboi.postMessage({seqA: seqA, seqB: seqB});
 }
 
 function compareBitwise(seqA, seqB) {
