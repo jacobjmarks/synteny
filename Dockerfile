@@ -7,5 +7,8 @@ COPY /package.json  /app
 COPY /mongodb.json* /app
 WORKDIR             /app
 EXPOSE 3000
-RUN npm install
+RUN apt update && \
+    apt install -y python build-essential
+RUN npm install -g node-gyp && \
+    npm install
 CMD npm start
