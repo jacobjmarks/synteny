@@ -51,7 +51,6 @@ router.post("/getKaryotypes/:division/:species", (req, res) => {
 
 router.post("/compareSequences", (req, res) => {
     let req_list = JSON.parse(req.body.req_list);
-    let use_bitwise = parseInt(req.body.use_bitwise);
     console.log("POST /compareSequences", req_list);
 
     database.addComparison({
@@ -65,7 +64,7 @@ router.post("/compareSequences", (req, res) => {
     })
 
     console.log("Comparing...");
-    sequences.pullAndCompareAll(req_list, use_bitwise, (err, results) => {
+    sequences.pullAndCompareAll(req_list, (err, results) => {
         if (err) {
             console.error(err);
             return res.status(500).end();

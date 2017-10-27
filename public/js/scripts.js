@@ -319,8 +319,7 @@ function compareSequences() {
         url: "/compareSequences",
         method: "POST",
         data: {
-            req_list: JSON.stringify(req_list),
-            use_bitwise: ($("#bitwise-switch").prop("checked")) ? 1 : 0
+            req_list: JSON.stringify(req_list)
         }
     })
     .done((match_matrix) => {
