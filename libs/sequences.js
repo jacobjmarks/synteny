@@ -1,6 +1,8 @@
 const ensembl = require("./ensembl.js");
 const ensemblGenomes = require("./ensemblGenomes.js");
 
+const LOGGING = require("../config.json").serverside_logging;
+
 module.exports.pullAndCompareAll = function(req_list, callback) {
     pull(req_list, (err, sequences) => {
         if (err) {
@@ -15,7 +17,7 @@ module.exports.pullAndCompareAll = function(req_list, callback) {
             for (let j = i + 1; j < sequences.length; j++) {
                 compare(sequences[i], sequences[j], (result) => {
                     match_matrix[i][j] = result;
-                    console.log(`${i} ${j}\t${match_matrix[i][j]}`);
+                    if (LOGGING) console.log(`${i} ${j}\t${match_matrix[i][j]}`);
 
                     count++;
                     if (count === toCompare) {

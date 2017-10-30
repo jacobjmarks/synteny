@@ -6,16 +6,18 @@ const ensemblGenomes = require("./libs/ensemblGenomes.js");
 const sequences = require("./libs/sequences.js");
 const database = require("./libs/database.js");
 
+const LOGGING = require("./config.json").serverside_logging;
+
 router.get('/', (req, res) => {
-    console.log("GET /");
+    if (LOGGING) console.log("GET /");
     res.render("index.pug");
 })
 
 router.post("/getDivisions", (req, res) => {
-    console.log("POST /getDivisions");
+    if (LOGGING) console.log("POST /getDivisions");
     ensemblGenomes.info_divisions((err, divisions) => {
         if (err) {
-            console.error(err);
+            if (LOGGING) console.error(err);
             return res.status(500).end();
         }
         res.send(divisions);
@@ -24,10 +26,10 @@ router.post("/getDivisions", (req, res) => {
 
 router.post("/getSpecies/:division", (req, res) => {
     let division = req.params.division;
-    console.log(`POST /getSpecies/${division}`)
+    if (LOGGING) console.log(`POST /getSpecies/${division}`)
     let cb = (err, species) => {
         if (err) {
-            console.error(err);
+            if (LOGGING) console.error(err);
             return res.status(500).end();
         }
         res.send(species);
@@ -38,10 +40,10 @@ router.post("/getSpecies/:division", (req, res) => {
 router.post("/getKaryotypes/:division/:species", (req, res) => {
     let division = req.params.division;
     let species = req.params.species;
-    console.log(`POST /getKaryotypes/${species}`);
+    if (LOGGING) console.log(`POST /getKaryotypes/${species}`);
     let cb = (err, karyotypes) => {
         if (err) {
-            console.error(err);
+            if (LOGGING) console.error(err);
             return res.status(500).end();
         }
         res.send(karyotypes);
@@ -51,7 +53,7 @@ router.post("/getKaryotypes/:division/:species", (req, res) => {
 
 router.post("/compareSequences", (req, res) => {
     let req_list = JSON.parse(req.body.req_list);
-    console.log("POST /compareSequences", req_list);
+    if (LOGGING) console.log("POST /compareSequences", req_list);
 
     database.addComparison({
         divisions: req_list.map((req) => req.division),
@@ -59,17 +61,17 @@ router.post("/compareSequences", (req, res) => {
         karyotypes: req_list.map((req) => req.karyotypes)
     }, (err) => {
         if (err) {
-            console.error(err.stack);
+            if (LOGGING) console.error(err.stack);
         }
     })
 
-    console.log("Comparing...");
+    if (LOGGING) console.log("Comparing...");
     sequences.pullAndCompareAll(req_list, (err, results) => {
         if (err) {
-            console.error(err);
+            if (LOGGING) console.error(err);
             return res.status(500).end();
         }
-        console.log("Done!");
+        if (LOGGING) console.log("Done!");
         res.send(results);
     });
 })
@@ -77,7 +79,7 @@ router.post("/compareSequences", (req, res) => {
 router.post("/getComparisons", (req, res) => {
     database.comparisons((err, comparisons) => {
         if (err) {
-            console.error(err);
+            if (LOGGING) console.error(err);
             return res.status(500).end();
         }
         res.send(comparisons);
