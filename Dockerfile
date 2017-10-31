@@ -11,5 +11,6 @@ EXPOSE 3000
 RUN apt update && \
     apt install -y python build-essential
 RUN npm install -g node-gyp && \
+    npm install -g forever && \
     npm install
 CMD npm start
