@@ -16,6 +16,13 @@ app.listen(PORT, () => {
     console.log("Server listening on port " + PORT);
 })
 
+setInterval(() => {
+    if(process.memoryUsage().rss > 700000000) {
+        console.log("MEMORY LIMIT REACHED");
+        process.kill(process.pid, 'SIGKILL');
+    }
+}, 1000)
+
 // Pug Templates
 const dir = "./public/js/templates/";
 if (!fs.existsSync(dir)){
