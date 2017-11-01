@@ -3,6 +3,11 @@ const ensemblGenomes = require("./ensemblGenomes.js");
 
 const LOGGING = require("../config.json").serverside_logging;
 
+/**
+ * Pull and compare all sequences in the given request list.
+ * @param {[{division: String, species: {name: String,common_name: String,display_name: String},karyotypes: [String]}]} req_list
+ * @param {(err?: Error, match_matrix: [[Number]])} callback
+ */
 module.exports.pullAndCompareAll = function(req_list, callback) {
     pull(req_list, (err, sequences) => {
         if (err) {
@@ -29,6 +34,11 @@ module.exports.pullAndCompareAll = function(req_list, callback) {
     })
 }
 
+/**
+ * Retrieve all sequences in the given request list from the Ensembl/EnsemblGenomes database.
+ * @param {[{division: String, species: {name: String,common_name: String,display_name: String},karyotypes: [String]}]} req_list 
+ * @param {(err?: Error, sequences: [String])} callback 
+ */
 function pull(req_list, callback) {
     let seqs = new Array(req_list.length).fill("");
     let error = false;
@@ -62,6 +72,12 @@ function pull(req_list, callback) {
 
 const Worker = require('webworker-threads').Worker;
 
+/**
+ * Compare the given two sequences.
+ * @param {String} seqA 
+ * @param {String} seqB 
+ * @param {(common_kmers: Number)} callback 
+ */
 function compare(seqA, seqB, callback) {
     let workerboi = new Worker(function() {
         function work (seqs) {

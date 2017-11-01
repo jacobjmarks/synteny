@@ -1,5 +1,9 @@
 const request = require("request");
 
+/**
+ * Retreive available divisions.
+ * @param {(err?: Error, divisions: Object)} callback
+ */
 module.exports.info_divisions = function(callback) {
     request({
         url: "http://rest.ensemblgenomes.org/info/divisions",
@@ -16,6 +20,10 @@ module.exports.info_divisions = function(callback) {
     })
 }
 
+/**
+ * Retreive available species.
+ * @param {(err?: Error, species: Object)} callback
+ */
 module.exports.info_species = function(division, callback) {
     request({
         url: "http://rest.ensemblgenomes.org/info/species",
@@ -35,6 +43,11 @@ module.exports.info_species = function(division, callback) {
     })
 }
 
+/**
+ * Retrieve available karyotypes for the given species.
+ * @param {String} species
+ * @param {(err?: Error, karyotypes: Object)} callback
+ */
 module.exports.info_assembly = function(species, callback) {
     request({
         url: `http://rest.ensemblgenomes.org/info/assembly/${species}`,
@@ -51,6 +64,12 @@ module.exports.info_assembly = function(species, callback) {
     })
 }
 
+/**
+ * Retrieve sequences based on the given species and their karyotypes.
+ * @param {String} species
+ * @param {[String]} karyotypes
+ * @param {(err?: Error, sequences: Object)} callback
+ */
 module.exports.sequence_region = function(species, karyotypes, callback) {
     const seq_length = 3000;
     request({

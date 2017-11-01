@@ -16,6 +16,7 @@ app.listen(PORT, () => {
     console.log("Server listening on port " + PORT);
 })
 
+// Memory monitoring for threaded issues
 setInterval(() => {
     if(process.memoryUsage().rss > 700000000) {
         console.log("MEMORY LIMIT REACHED");

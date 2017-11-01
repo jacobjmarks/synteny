@@ -1,3 +1,6 @@
+//
+// INITIAL WINDOW BINDINGS -----------------------------------------------
+//
 $(document).ready(() => {
     alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -168,7 +171,13 @@ $(document).ready(() => {
     recent_comparisons = [];
     getRecentComparisons();
 })
+//
+// -----------------------------------------------------------------------
+//
 
+/**
+ * Fetch recent comparisons from the Node server.
+ */
 function getRecentComparisons() {
     $.ajax({
         url: "/getComparisons",
@@ -183,6 +192,9 @@ function getRecentComparisons() {
     })
 }
 
+/**
+ * Clear and redraw the recent comparison list.
+ */
 function updateRecentComparisons() {
     $("#recent-list").empty();
     for (let i = 0; i < recent_comparisons.length; i++) {
@@ -206,6 +218,10 @@ function updateRecentComparisons() {
     }
 }
 
+/**
+ * Clear the requested sequence list and repopulate with the given recent comparison.
+ * @param {{divisions: [String], species: [{name: String,common_name: String,display_name: String}],karyotypes: [[String]]}} comparison 
+ */
 function viewRecent(comparison) {
     ($("#header").hasClass("in")) ? ()=>{} :$("#btn-collapse").click();
     req_list = [];
@@ -223,6 +239,9 @@ function viewRecent(comparison) {
     updateList();
 }
 
+/**
+ * Populate available Divisions.
+ */
 function populateDivisions() {
     loading.divisions(true);
     $.ajax({
@@ -243,6 +262,10 @@ function populateDivisions() {
     })
 }
 
+/**
+ * Populate avialable Species for the given Division.
+ * @param {String} division 
+ */
 function populateSpecies(division) {
     loading.species(true);
     $.ajax({
@@ -265,6 +288,11 @@ function populateSpecies(division) {
     })
 }
 
+/**
+ * Populate available Karyotypes for the given Species under the given Division.
+ * @param {String} division 
+ * @param {String} species 
+ */
 function populateKaryotypes(division, species) {
     loading.karyotypes(true);
     $.ajax({
@@ -285,6 +313,9 @@ function populateKaryotypes(division, species) {
     })
 }
 
+/**
+ * Clear and redraw the requested sequences list.
+ */
 function updateList() {
     list_div.empty();
     for (let i = 0; i < req_list.length; i++) {
@@ -307,11 +338,18 @@ function updateList() {
     }
 }
 
+/**
+ * Add the given sequence selection to the request list.
+ * @param {{division: String, species: {name: String,common_name: String,display_name: String},karyotypes: [String]}} selection 
+ */
 function addToList(selection) {
     req_list.push(selection);
     updateList();
 }
 
+/**
+ * Submit the selected sequences for comparison.
+ */
 function compareSequences() {
     loading.results(true);
     seq_container.empty();
@@ -333,6 +371,10 @@ function compareSequences() {
     })
 }
 
+/**
+ * Draw a D3 bubble chart for the given match matrix.
+ * @param {[[Number]]} match_matrix 
+ */
 function drawChart(match_matrix) {
     console.log(match_matrix);
     $("#chart").empty();

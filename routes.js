@@ -8,11 +8,13 @@ const database = require("./libs/database.js");
 
 const LOGGING = require("./config.json").serverside_logging;
 
+// Index page.
 router.get('/', (req, res) => {
     if (LOGGING) console.log("GET /");
     res.render("index.pug");
 })
 
+// Retreive and respond with available Divisions.
 router.post("/getDivisions", (req, res) => {
     if (LOGGING) console.log("POST /getDivisions");
     ensemblGenomes.info_divisions((err, divisions) => {
@@ -24,6 +26,7 @@ router.post("/getDivisions", (req, res) => {
     })
 })
 
+// Retrieve and respond with available Species for the given Division.
 router.post("/getSpecies/:division", (req, res) => {
     let division = req.params.division;
     if (LOGGING) console.log(`POST /getSpecies/${division}`)
@@ -37,6 +40,7 @@ router.post("/getSpecies/:division", (req, res) => {
     (division === "Ensembl") ? ensembl.info_species(cb) : ensemblGenomes.info_species(division, cb);
 })
 
+// Retrieve and respond with available Karyotypes for the given Species under the given Divsion.
 router.post("/getKaryotypes/:division/:species", (req, res) => {
     let division = req.params.division;
     let species = req.params.species;
@@ -51,6 +55,7 @@ router.post("/getKaryotypes/:division/:species", (req, res) => {
     (division === "Ensembl") ? ensembl.info_assembly(species, cb) : ensemblGenomes.info_assembly(species, cb);
 })
 
+// Compare the provided sequences and respond with the resulting match matrix.
 router.post("/compareSequences", (req, res) => {
     let req_list = JSON.parse(req.body.req_list);
     if (LOGGING) console.log("POST /compareSequences", req_list);
@@ -76,6 +81,7 @@ router.post("/compareSequences", (req, res) => {
     });
 })
 
+// Retrieve and respond with recent comparisons.
 router.post("/getComparisons", (req, res) => {
     database.comparisons((err, comparisons) => {
         if (err) {
